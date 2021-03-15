@@ -13,14 +13,13 @@ public class ArquivoUtils {
 
     public void carregarArquivo(final String nomeArquivo) throws Exception {
 
-        String str = null;
         try {
             this.leitor = new BufferedReader(new FileReader(nomeArquivo + ".txt"));
-//            this.escritor = new BufferedWriter(new FileWriter("labirinto.txt"));
 
             int lineCont = 1;
             int lines = 0;
             int colums = 0;
+            String str = null;
 
             while((str = this.leitor.readLine()) != null) {
 
@@ -34,9 +33,9 @@ public class ArquivoUtils {
             }
             this.leitor.close();
             this.labirinto = new String[lines][colums];
-//            this.escritor.close();
+
         } catch(IOException e) {
-            System.out.println("Arquivo corrompido");
+            throw new Exception("Arquivo corrompido");
         }
     }
 

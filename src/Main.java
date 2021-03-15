@@ -12,11 +12,10 @@ public class Main {
         ArquivoUtils arq = new ArquivoUtils();
 
         try {
-            arq.carregarArquivo("labirinto");
+            arq.carregarArquivo("labirinto2");
             String[][] lab = arq.montaLabirinto();
         } catch (Exception e) {
-            //TODO melhorar
-            System.err.println("Deu ruim");
+            System.err.println(e.getMessage());
         }
 
     }
