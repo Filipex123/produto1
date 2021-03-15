@@ -10,7 +10,14 @@ public class Main {
         Pilha<Pilha<Coordenada>> possibilidades = new Pilha(40);
 
         ArquivoUtils arq = new ArquivoUtils();
-        arq.carregarArquivo("labirinto");
-        String[][] lab = arq.montaLabirinto();
+
+        try {
+            arq.carregarArquivo("labirinto");
+            String[][] lab = arq.montaLabirinto();
+        } catch (Exception e) {
+            //TODO melhorar
+            System.err.println("Deu ruim");
+        }
+
     }
 }
