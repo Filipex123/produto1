@@ -1,7 +1,5 @@
 package Ferramenta;
 
-import Entidade.Coordenada;
-
 import java.io.*;
 
 public class ArquivoUtils {
@@ -10,7 +8,7 @@ public class ArquivoUtils {
     private BufferedWriter escritor;
     private String[][] labirinto;
     private String data = "";
-    private int lines, colums;
+    private int lines, columns;
 
     public void carregarArquivo(final String nomeArquivo) throws Exception {
 
@@ -32,13 +30,13 @@ public class ArquivoUtils {
                 }
                 
                 if(lineCont == 2)
-                    this.colums = str.length();
+                    this.columns = str.length();
 
                 data+=str;
                 lineCont++;
             }
             this.leitor.close();
-            this.labirinto = new String[this.lines][this.colums];
+            this.labirinto = new String[this.lines][this.columns];
 
         } catch(IOException e) {
             throw new Exception("Arquivo corrompido");
