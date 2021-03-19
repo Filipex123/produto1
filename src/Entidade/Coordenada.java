@@ -28,7 +28,7 @@ public class Coordenada {
 
     @Override
     public String toString() {
-        return "Entidades.Coordenada{" +
+        return "Coordenada{" +
                 "x=" + x +
                 ", y=" + y +
                 '}';

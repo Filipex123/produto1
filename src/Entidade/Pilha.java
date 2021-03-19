@@ -27,7 +27,7 @@ public class Pilha<T> {
         }
 
         if(this.topo -1 == this.elemento.length ) {
-            throw new Exception("Entidades.Pilha cheia");
+            throw new Exception("Pilha cheia");
         }
 
         this.topo++;
@@ -37,7 +37,7 @@ public class Pilha<T> {
     public void retireUmElemento() throws Exception {
 
         if(this.topo == -1) {
-            throw new Exception("Entidades.Pilha Vazia");
+            throw new Exception("Pilha Vazia");
         }
 
         this.elemento[topo] = null;
@@ -54,7 +54,7 @@ public class Pilha<T> {
 
     @Override
     public String toString() {
-        return "Entidades.Pilha{" +
+        return "Pilha{" +
                 "elemento=" + Arrays.toString(elemento) +
                 ", topo=" + topo +
                 '}';
