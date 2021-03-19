@@ -1,92 +1,96 @@
 package Ferramenta;
 
+
+import Entidade.Labirinto;
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.*;
+
 
 public class ArquivoUtils {
 
-    private BufferedReader leitor;
-    private BufferedWriter escritor;
     private String[][] labirinto;
-    private String data = "";
+    private StringBuilder data;
     private int lines, columns;
 
     public void carregarArquivo(final String nomeArquivo) throws Exception {
 
         try {
-            this.leitor = new BufferedReader(new FileReader(nomeArquivo + ".txt"));
+            BufferedReader leitor = new BufferedReader(new FileReader(nomeArquivo + ".txt"));
+            this.lines = Integer.parseInt(leitor.readLine());
 
-            int lineCont = 1;
-            String str = null;
-
-            while((str = this.leitor.readLine()) != null) {
-
-                if(lineCont == 1){
-                    int n = Integer.parseInt(str);
-                    if(n >= 3){
-                        this.lines = n;
-                    }else{
-                         // erro aqui   
-                    }
-                }
-                
-                if(lineCont == 2)
-                    this.columns = str.length();
-
-                data+=str;
-                lineCont++;
+            if(this.lines < 3) {
+                throw new Exception("Tamanho de linhas deve ser ");
             }
-            this.leitor.close();
+
+            String str = null;
+            data  = new StringBuilder();
+            int contE = 0;
+            int contS = 0;
+            int contLines = 1;
+            while((str = leitor.readLine()) != null) {
+
+                if (this.columns != 0 && this.columns != str.length()) {
+                    throw new Exception("Todas as linhas devem ter o mesmo tamanho");
+                }
+
+                if (!str.matches("^[ES#\\s]+$")) {
+                    throw new Exception("Arquivo contém caracteres inválidos");
+                }
+
+                if(contLines == 1 || contLines == this.lines) {
+
+                    if(str.contains(" ")) {
+                        throw new Exception("Nao pode haver espaço vazio na primeira ou ultima linha");
+                    }
+
+                    if(str.substring(0,1).contains("E") || str.substring(0,1).contains("S")
+                            || str.substring(columns).contains("E") || str.substring(columns).contains("S")) {
+                        throw new Exception("Entrada e/ou Saida nao podem estar nos cantos");
+                    }
+                    contE += StringUtils.countMatches(str, "E");
+                    contS += StringUtils.countMatches(str, "S");
+                } else {
+                    if(str.substring(0,1).contains(" ")) {
+                        throw new Exception("Nao pode haver espaço vazio na primeira coluna");
+                    }
+
+                    if(str.substring(1, columns-2).contains("S") || str.substring(1, columns-2).contains("E")) {
+                        throw new Exception("Entrada e/ou Saida devem estar apenas nas extremidades");
+                    }
+                    contE += StringUtils.countMatches(str.charAt(0) + str.substring(columns-1,columns), "E");
+                    contS += StringUtils.countMatches(str.charAt(0) + str.substring(columns-1,columns), "S");
+                }
+
+                this.columns = str.length();
+                data.append(str);
+                contLines++;
+            }
+
+            if (contE != 1 || contS != 1) {
+                throw new Exception("O labirinto deve ter 1 entrada e 1 saida");
+            }
+            leitor.close();
             this.labirinto = new String[this.lines][this.columns];
 
-        } catch(IOException e) {
-            throw new Exception("Arquivo corrompido");
+        } catch(NumberFormatException e) {
+            throw new Exception("Arquivo corrompido: problema [ A primeira linha deve ser um numero ]");
+        } catch(Exception e) {
+            throw new Exception("Arquivo corrompido: problema [ " + e.getMessage() + " ]");
         }
     }
 
+    //TODO será movido para uma classe Labirinto futuramente
     public String[][] montaLabirinto() {
-        int cont = 1;
+        int cont = 0;
         for(int i = 0; i < this.lines; i++) {
             for(int j = 0; j < this.columns; j++) {
                 this.labirinto[i][j] = data.substring(cont,cont+1);
                 System.out.print(this.labirinto[i][j]);
                 cont++;
             }
+            System.out.println();
         }
         return this.labirinto;
-    }
-    
-    public boolean verificaLabirinto(){
-        int numE = 0, numS = 0;
-        for(int i = 0; i < this.lines; i++) {
-            for (int j = 0; j < this.columns; j++) {
-                // Verifica se tem algum caracter diferente de [E, S, #, espaço]
-                if(!this.labirinto[i][j].equals("E") &&
-                        !this.labirinto[i][j].equals("S") &&
-                        !this.labirinto[i][j].equals("#") &&
-                        !this.labirinto[i][j].equals(" ")){
-                    return false;
-                }
-                // Verificando quantos 'E' e 'S' tem nas bordas
-                if (i == 0 || i == this.lines - 1 || j == 0 || j == this.columns - 1) {
-                    if (this.labirinto[i][j].equals("E")) {
-                        numE++;
-                    } else if (this.labirinto[i][j].equals("S")) {
-                        numS++;
-                    } else if (this.labirinto[i][j].equals(" ")){
-                        // Caso tenha algum espaço na borda
-                        return false;
-                    }
-                }
-            }
-        }
-        // caso tenha seja diferente de 1 tem alguma coisa errada
-        if(numE != 1 || numS != 1)
-            return false;
-
-        return true;
-    }
-
-    public String[][] getLabirinto() {
-        return labirinto;
     }
 }
