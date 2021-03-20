@@ -13,16 +13,15 @@ public class Main {
         Coordenada coordenadaEntrada = new Coordenada(5,5);
         Coordenada coordenadaSaida = new Coordenada(2,2);
 
-        Labirinto labirinto = new Labirinto(5,5,new Coordenada(5,5),coordenadaSaida);
 
         ArquivoUtils arq = new ArquivoUtils();
+        Labirinto lab;
 
         try {
-            arq.carregarArquivo("labirinto2");
-            String[][] lab = arq.montaLabirinto();
+            lab = arq.carregarArquivo("labirinto");
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
-
+        System.out.println("oidajsdioa");
     }
 }
