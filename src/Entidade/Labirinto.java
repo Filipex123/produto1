@@ -30,4 +30,15 @@ public class Labirinto {
         return labirinto;
     }
 
+    public Coordenada getEntrada() {
+        return entrada;
+    }
+    public Coordenada getSaida() {
+        return saida;
+    }
+    public String[][] getMapa() {
+        return mapa;
+    }
+
+
 }
