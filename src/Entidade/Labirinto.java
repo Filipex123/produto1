@@ -45,7 +45,7 @@ public class Labirinto {
     }
 
     public boolean onSaida() {
-        return this.atual == this.saida;
+        return this.atual.equals(this.saida);
     }
 
     public Pilha<Coordenada> getAdjacentes() throws Exception {
@@ -78,7 +78,7 @@ public class Labirinto {
         return adj;
     }
 
-    public void andar(Coordenada value) throws Exception {
+    public void andar(Coordenada value) {
         this.atual = value;
         if (mapa[this.atual.getX()][this.atual.getY()].equals(" ")) {
             mapa[this.atual.getX()][this.atual.getY()] = "*";

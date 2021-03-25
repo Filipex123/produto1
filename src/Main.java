@@ -11,7 +11,7 @@ public class Main {
         Labirinto lab;
 
         try {
-            lab = arq.carregarArquivo("labirinto");
+            lab = arq.carregarArquivo("labirinto3");
 
             while (!lab.onSaida()) {
                 Pilha<Coordenada> adjacentes = lab.getAdjacentes();
