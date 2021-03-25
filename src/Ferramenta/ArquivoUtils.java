@@ -1,6 +1,5 @@
 package Ferramenta;
 
-
 import Entidade.Coordenada;
 import Entidade.Labirinto;
 import org.apache.commons.lang3.StringUtils;
@@ -30,10 +29,11 @@ public class ArquivoUtils {
             int contS = 0;
             int contLines = 1;
             while((str = leitor.readLine()) != null) {
-
                 if (columns != 0 && columns != str.length()) {
                     throw new Exception("Todas as linhas devem ter o mesmo tamanho");
                 }
+
+                columns = str.length();
 
                 if (!str.matches("^[ES#\\s]+$")) {
                     throw new Exception("Arquivo contém caracteres inválidos");

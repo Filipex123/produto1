@@ -21,9 +21,9 @@ public class Labirinto {
     private String[][] montaLabirinto(String data) {
         String[][] labirinto = new String[this.altura][this.largura];
         int cont = 0;
-        for (int i = 0; i < this.altura; i++) {
-            for (int j = 0; j < this.largura; j++) {
-                labirinto[i][j] = data.substring(cont, cont + 1);
+        for(int i = 0; i < this.altura; i++) {
+            for(int j = 0; j < this.largura; j++) {
+                labirinto[i][j] = data.substring(cont,cont+1);
                 System.out.print(labirinto[i][j]);
                 cont++;
             }
@@ -33,64 +33,77 @@ public class Labirinto {
     }
 
     public Coordenada getEntrada() {
-        return entrada;
+        return this.entrada;
     }
 
     public Coordenada getSaida() {
-        return saida;
+        return this.saida;
+    }
+
+    public int getAltura() {
+        return this.altura;
+    }
+
+    public int getLargura() {
+        return this.largura;
     }
 
     public String[][] getMapa() {
-        return mapa;
+        return this.mapa;
     }
 
-    public boolean onSaida() {
-        return this.atual == this.saida;
+    public boolean onSaida(){
+        return this.atual.Equals(this.saida);
+    }
+
+    public boolean onEntrada(){
+        return this.atual.Equals(this.entrada);
     }
 
     public Pilha<Coordenada> getAdjacentes() throws Exception {
-
         Pilha<Coordenada> adj = new Pilha<>(3);
+        int x = this.atual.getX(), y = this.atual.getY();
 
-        int x = this.atual.getX();
-        int y = this.atual.getY();
-
-        if (y != 0 && mapa[x][y - 1].equals(" ")) {
+        if(y != 0 && (mapa[x][y - 1].equals(" ") || mapa[x][y - 1].equals("S"))){
             Coordenada value = new Coordenada(x, y - 1);
             adj.guardeUmElemento(value);
         }
-
-        if (mapa[x + 1][y].equals(" ")) {
+        if(x < altura - 1 && (mapa[x + 1][y].equals(" ") || mapa[x + 1][y].equals("S"))){
             Coordenada value = new Coordenada(x + 1, y);
             adj.guardeUmElemento(value);
         }
-
-        if (mapa[x][y + 1].equals(" ")) {
+        if(y < largura - 1 && (mapa[x][y + 1].equals(" ") || mapa[x][y + 1].equals("S"))){
             Coordenada value = new Coordenada(x, y + 1);
             adj.guardeUmElemento(value);
         }
-
-        if (x != 0 && mapa[x - 1][y].equals(" ")) {
+        if(x != 0 && (mapa[x - 1][y].equals(" ") || mapa[x - 1][y].equals("S"))){
             Coordenada value = new Coordenada(x - 1, y);
             adj.guardeUmElemento(value);
         }
-
         return adj;
     }
 
     public void andar(Coordenada value) throws Exception {
         this.atual = value;
-        if (mapa[this.atual.getX()][this.atual.getY()].equals(" ")) {
-            mapa[this.atual.getX()][this.atual.getY()] = "*";
-        }
+        // guardando o valor em variaveis com nomes menores
+        int x = this.atual.getX(), y = this.atual.getY();
+        if(mapa[x][y].equals(" ")) mapa[x][y] = "*";
+    }
+
+    public void voltar(Coordenada value) throws Exception {
+        // guardando o valor em variaveis com nomes menores
+        int x = this.atual.getX(), y = this.atual.getY();
+        mapa[x][y] = " ";
+        this.atual = value;
     }
 
     public void imprimeLabirinto() {
-        for (int i = 0; i < this.altura; i++) {
-            for (int j = 0; j < this.largura; j++) {
+        for(int i = 0; i < this.altura; i++) {
+            for(int j = 0; j < this.largura; j++) {
                 System.out.print(mapa[i][j]);
             }
             System.out.println();
         }
     }
+
 }

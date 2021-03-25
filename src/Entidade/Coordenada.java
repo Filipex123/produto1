@@ -36,4 +36,8 @@ public class Coordenada {
                 ", y=" + y +
                 '}';
     }
+
+    public boolean Equals(Coordenada obj) {
+        return this.x == obj.getX() && this.y == obj.getY();
+    }
 }
