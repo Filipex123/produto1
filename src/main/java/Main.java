@@ -3,6 +3,14 @@ import Entidade.Labirinto;
 import Entidade.Pilha;
 import Ferramenta.ArquivoUtils;
 
+/**
+ * Classe main onde carrega e resolve o labirinto
+ *
+ * @author Filipe Zanelato
+ * @author Filipe Neves
+ * @author Leonardo Guedes
+ * @author Pedro Denilson
+ */
 public class Main {
     public static void main(String[] args) {
         boolean progressivo = true;
@@ -12,7 +20,7 @@ public class Main {
 
         try {
 
-            lab = arq.carregarArquivo("labirinto2");
+            lab = arq.carregarArquivo("labirinto6");
             final int tamanhoLab = lab.getAltura() * lab.getLargura();
 
             Pilha<Coordenada> caminhos = new Pilha<Coordenada>(tamanhoLab);
@@ -49,9 +57,15 @@ public class Main {
                 caminhos.retireUmElemento();
             }
 
+            int cont = 0;
             while (!aux.isVazia()) {
-                System.out.println(aux.recupereUmElemento().toString());
+                if(cont == lab.getLargura() / 7) {
+                    System.out.println();
+                    cont = 0;
+                }
+                System.out.print(aux.recupereUmElemento().toString() + " - ");
                 aux.retireUmElemento();
+                cont++;
             }
         } catch (Exception e) {
             System.err.println(e.getMessage());

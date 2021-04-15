@@ -1,5 +1,8 @@
 package Entidade;
 
+/**
+ * Entidade de labirinto com as informações dimensionais
+ */
 public class Labirinto {
 
     private Coordenada entrada;
@@ -9,6 +12,15 @@ public class Labirinto {
     private String[][] mapa;
     private Coordenada atual;
 
+    /**
+     * Construtor de labirinto
+     *
+     * @param altura altura
+     * @param largura largura
+     * @param entrada entrada
+     * @param saida saida
+     * @param data paredes do labirinto
+     */
     public Labirinto(int altura, int largura, Coordenada entrada, Coordenada saida, String data) {
         this.altura = altura;
         this.largura = largura;
@@ -32,18 +44,38 @@ public class Labirinto {
         return labirinto;
     }
 
+    /**
+     * Método get para a propriedade Altura
+     *
+     * @return int valor da altura
+     */
     public int getAltura() {
         return this.altura;
     }
 
+    /**
+     * Método get para a propriedade Largura
+     *
+     * @return int valor da largura
+     */
     public int getLargura() {
         return this.largura;
     }
 
+    /**
+     * Método que verifica se o cursor está na saída
+     *
+     * @return int valor da altura
+     */
     public boolean onSaida() {
         return this.atual.validaIgualdade(this.saida);
     }
 
+    /**
+     * Método para pegar a coordenada adjacente da posição atual
+     *
+     * @return Pilha<Coordenada> com as coordenadas adjacentes
+     */
     public Pilha<Coordenada> getAdjacentes() throws Exception {
         Pilha<Coordenada> adj = new Pilha<Coordenada>(3);
         int x = this.atual.getX(), y = this.atual.getY();
@@ -67,6 +99,11 @@ public class Labirinto {
         return adj;
     }
 
+    /**
+     * Método para caminhar no labirinto
+     *
+     * @param value coordenada para onde ele tenta caminhar
+     */
     public void andar(Coordenada value) {
         this.atual = value;
         int x = this.atual.getX();
@@ -77,6 +114,11 @@ public class Labirinto {
         }
     }
 
+    /**
+     * Método para voltar caso nao tenha adjacentes livres para andar
+     *
+     * @param value coordenada para onde ele tenta caminhar
+     */
     public void voltar(Coordenada value) {
         int x = this.atual.getX();
         int y = this.atual.getY();
@@ -84,6 +126,9 @@ public class Labirinto {
         this.atual = value;
     }
 
+    /**
+     * Método que imprime o labirinto
+     */
     public void imprimeLabirinto() {
         for (int i = 0; i < this.altura; i++) {
             for (int j = 0; j < this.largura; j++) {
