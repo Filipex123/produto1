@@ -28,10 +28,12 @@ public class Janela {
         this.botao[3] = new JButton("Executar Labirinto");
         botoes.add(this.botao[3]);
 
+        //set de painel de area de edicao
         Border borderArea = BorderFactory.createLineBorder(Color.BLACK, 1);
         this.area.setBorder(borderArea);
         areaEdicao.add(this.area);
 
+        //set de painel de area de log
         Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
         this.log.setEditable(false);
         this.log.setBackground(Color.GRAY);
