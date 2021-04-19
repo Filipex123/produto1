@@ -1,14 +1,22 @@
 package Ferramenta;
 
-
 import Entidade.Coordenada;
 import Entidade.Labirinto;
 import org.apache.commons.lang3.StringUtils;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
+/**
+ * Utils para carregar e validar arquivo de texto referente ao labirinto
+ */
 public class ArquivoUtils {
 
+    /**
+     * Método responsável por carregar um arquivo txt em um objeto Labirinto
+     * @param nomeArquivo nome do arquivo a ser aberto
+     * @return estrutura Java de labirinto
+     * @throws Exception exceções de validação de arquivo
+     */
     public Labirinto carregarArquivo(final String nomeArquivo) throws Exception {
 
         StringBuilder data;
@@ -30,10 +38,11 @@ public class ArquivoUtils {
             int contS = 0;
             int contLines = 1;
             while((str = leitor.readLine()) != null) {
-
                 if (columns != 0 && columns != str.length()) {
                     throw new Exception("Todas as linhas devem ter o mesmo tamanho");
                 }
+
+                columns = str.length();
 
                 if (!str.matches("^[ES#\\s]+$")) {
                     throw new Exception("Arquivo contém caracteres inválidos");
