@@ -1,5 +1,7 @@
 package Entidade;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Entidade de labirinto com as informações dimensionais
  */
@@ -15,11 +17,11 @@ public class Labirinto {
     /**
      * Construtor de labirinto
      *
-     * @param altura altura
+     * @param altura  altura
      * @param largura largura
      * @param entrada entrada
-     * @param saida saida
-     * @param data paredes do labirinto
+     * @param saida   saida
+     * @param data    paredes do labirinto
      */
     public Labirinto(int altura, int largura, Coordenada entrada, Coordenada saida, String data) {
         this.altura = altura;
@@ -32,34 +34,13 @@ public class Labirinto {
 
     private String[][] montaLabirinto(String data) {
         String[][] labirinto = new String[this.altura][this.largura];
-        int cont = 0;
+        String[] linhas = data.split("\n");
         for (int i = 0; i < this.altura; i++) {
-            for (int j = 0; j < this.largura; j++) {
-                labirinto[i][j] = data.substring(cont, cont + 1);
-                System.out.print(labirinto[i][j]);
-                cont++;
+            for(int j = 0; j < this.largura; j++) {
+                labirinto[i][j] = "" + linhas[i].charAt(j);
             }
-            System.out.println();
         }
         return labirinto;
-    }
-
-    /**
-     * Método get para a propriedade Altura
-     *
-     * @return int valor da altura
-     */
-    public int getAltura() {
-        return this.altura;
-    }
-
-    /**
-     * Método get para a propriedade Largura
-     *
-     * @return int valor da largura
-     */
-    public int getLargura() {
-        return this.largura;
     }
 
     /**
@@ -67,7 +48,7 @@ public class Labirinto {
      *
      * @return int valor da altura
      */
-    public boolean onSaida() {
+    private boolean onSaida() {
         return this.atual.validaIgualdade(this.saida);
     }
 
@@ -76,7 +57,7 @@ public class Labirinto {
      *
      * @return Pilha<Coordenada> com as coordenadas adjacentes
      */
-    public Pilha<Coordenada> getAdjacentes() throws Exception {
+    private Pilha<Coordenada> getAdjacentes() throws Exception {
         Pilha<Coordenada> adj = new Pilha<Coordenada>(3);
         int x = this.atual.getX(), y = this.atual.getY();
 
@@ -104,7 +85,7 @@ public class Labirinto {
      *
      * @param value coordenada para onde ele tenta caminhar
      */
-    public void andar(Coordenada value) {
+    private void andar(Coordenada value) {
         this.atual = value;
         int x = this.atual.getX();
         int y = this.atual.getY();
@@ -119,7 +100,7 @@ public class Labirinto {
      *
      * @param value coordenada para onde ele tenta caminhar
      */
-    public void voltar(Coordenada value) {
+    private void voltar(Coordenada value) {
         int x = this.atual.getX();
         int y = this.atual.getY();
         mapa[x][y] = " ";
@@ -127,15 +108,49 @@ public class Labirinto {
     }
 
     /**
-     * Método que imprime o labirinto
+     * Método que imprime o labirinto em componente
      */
-    public void imprimeLabirinto() {
+    public String imprimeLabirinto() {
+        StringBuilder lab = new StringBuilder();
         for (int i = 0; i < this.altura; i++) {
             for (int j = 0; j < this.largura; j++) {
-                System.out.print(mapa[i][j]);
+                lab.append(mapa[i][j]);
             }
-            System.out.println();
+            lab.append("\n");
         }
+
+        return lab.toString();
     }
 
+    public void resolve() throws Exception {
+
+        final int tamanhoLab = this.altura * this.largura;
+        boolean progressivo = true;
+
+        Pilha<Coordenada> caminhos = new Pilha<Coordenada>(tamanhoLab);
+        Pilha<Coordenada> adjacentes = new Pilha<Coordenada>(3);
+        Pilha<Pilha<Coordenada>> possibilidades = new Pilha(tamanhoLab);
+
+        while (!this.onSaida()) {
+            if (progressivo) adjacentes = this.getAdjacentes();
+
+            if (!adjacentes.isVazia()) {
+                this.andar(adjacentes.recupereUmElemento());
+                caminhos.guardeUmElemento(adjacentes.recupereUmElemento());
+                adjacentes.retireUmElemento();
+                possibilidades.guardeUmElemento(adjacentes);
+                progressivo = true;
+            } else {
+                progressivo = false;
+                while (adjacentes.isVazia()) {
+                    caminhos.retireUmElemento();
+                    if (caminhos.isVazia())
+                        throw new Exception("Saida não encontrada");
+                    this.voltar(caminhos.recupereUmElemento());
+                    adjacentes = possibilidades.recupereUmElemento();
+                    possibilidades.retireUmElemento();
+                }
+            }
+        }
+    }
 }

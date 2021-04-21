@@ -1,7 +1,5 @@
-import Entidade.Coordenada;
 import Entidade.Labirinto;
-import Entidade.Pilha;
-import Ferramenta.ArquivoUtils;
+import Ferramenta.LabirintoUtils;
 import interfaces.Janela;
 
 /**
@@ -16,7 +14,7 @@ public class Main {
     public static void main(String[] args) {
         boolean progressivo = true;
 
-        ArquivoUtils arq = new ArquivoUtils();
+        LabirintoUtils arq = new LabirintoUtils();
         Labirinto lab;
 
         try {

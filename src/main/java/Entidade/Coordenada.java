@@ -5,8 +5,11 @@ package Entidade;
  */
 public class Coordenada {
 
-    private final int x;
-    private final int y;
+    private int x;
+    private int y;
+
+    public Coordenada() {
+    }
 
     /**
      * Construtor de Coordenada
@@ -35,6 +38,16 @@ public class Coordenada {
      */
     public int getY() {
         return y;
+    }
+
+    //TODO javaDoc
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    //TODO javaDoc
+    public void setY(int y) {
+        this.y = y;
     }
 
     @Override
