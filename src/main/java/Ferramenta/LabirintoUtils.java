@@ -7,6 +7,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.List;
+<<<<<<< Updated upstream
+=======
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+>>>>>>> Stashed changes
 
 /**
  * Utils para carregar e validar arquivo de texto referente ao labirinto
@@ -64,7 +69,13 @@ public class LabirintoUtils {
     }
 
     public static void verifica(String data) throws Exception {
+<<<<<<< Updated upstream
         if(data.matches("[^ES#\\s]")) {
+=======
+        Pattern pattern = Pattern.compile("^[ES#\\s]+$");
+        Matcher matcher = pattern.matcher((CharSequence) data);
+        if(!matcher.matches()) {
+>>>>>>> Stashed changes
             throw new Exception("Labirinto possui caracteres inválidos");
         }
 

@@ -1,8 +1,12 @@
 package interfaces;
 
+<<<<<<< Updated upstream
 import Entidade.Coordenada;
 import Entidade.Labirinto;
 import Entidade.Pilha;
+=======
+import Entidade.Labirinto;
+>>>>>>> Stashed changes
 import Ferramenta.LabirintoUtils;
 
 import javax.swing.*;
@@ -37,6 +41,10 @@ public class Janela {
                 try {
                     area.setText(LabirintoUtils.carregarArquivo(selectedFile));
                 } catch (Exception ex) {
+<<<<<<< Updated upstream
+=======
+                   log.append("\n");
+>>>>>>> Stashed changes
                    log.append(ex.getMessage());
                 }
             }
@@ -60,6 +68,10 @@ public class Janela {
                     JOptionPane.showMessageDialog(fileChooser, "Arquivo salvo com sucesso!");
 
                 } catch (Exception ex) {
+<<<<<<< Updated upstream
+=======
+                    log.append("\n");
+>>>>>>> Stashed changes
                     log.append(ex.getMessage());
                 }
             }
@@ -71,6 +83,10 @@ public class Janela {
                 labirinto.resolve();
                 area.setText(labirinto.imprimeLabirinto());
             } catch (Exception ex) {
+<<<<<<< Updated upstream
+=======
+                log.append("\n");
+>>>>>>> Stashed changes
                 log.append(ex.getMessage());
             }
         }

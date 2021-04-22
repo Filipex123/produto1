@@ -19,6 +19,7 @@ public class Main {
 
         try {
             new Janela();
+<<<<<<< Updated upstream
 //            lab = arq.carregarArquivo("labirinto6");
 //            final int tamanhoLab = lab.getAltura() * lab.getLargura();
 //
@@ -66,6 +67,8 @@ public class Main {
 //                aux.retireUmElemento();
 //                cont++;
 //            }
+=======
+>>>>>>> Stashed changes
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
