@@ -1,8 +1,6 @@
 package interfaces;
 
-import Entidade.Coordenada;
 import Entidade.Labirinto;
-import Entidade.Pilha;
 import Ferramenta.LabirintoUtils;
 
 import javax.swing.*;
@@ -18,7 +16,7 @@ import java.io.FileWriter;
 public class Janela {
 
     private JFrame janela = new JFrame("Labirinto");
-    private JTextArea  log = new JTextArea("", 8, 140);
+    private JTextArea log = new JTextArea("", 8, 140);
     private JTextArea area = new JTextArea("", 31, 140);
     private JButton[] botao = new JButton[4];
     private JFileChooser fileChooser = new JFileChooser();
@@ -30,28 +28,29 @@ public class Janela {
         private void trateClickEmAbrir() {
             area.setEditable(true);
             int result = fileChooser.showOpenDialog(janela);
-            if(result == JFileChooser.APPROVE_OPTION) {
+            if (result == JFileChooser.APPROVE_OPTION) {
                 selectedFile = fileChooser.getSelectedFile();
                 log.append("\nArquivo selecionado: " + selectedFile.getAbsolutePath());
 
                 try {
                     area.setText(LabirintoUtils.carregarArquivo(selectedFile));
                 } catch (Exception ex) {
-                   log.append(ex.getMessage());
+                    log.append("\n");
+                    log.append(ex.getMessage());
                 }
             }
         }
 
         private void trateClickEmSalvar() {
             int result = fileChooser.showSaveDialog(janela);
-            if(result == JFileChooser.APPROVE_OPTION) {
+            if (result == JFileChooser.APPROVE_OPTION) {
                 selectedFile = fileChooser.getSelectedFile();
                 try {
                     FileWriter writer = new FileWriter(selectedFile);
                     BufferedWriter buffer = new BufferedWriter(writer);
 
                     String text = area.getText();
-                    LabirintoUtils.verifica(text);
+                    LabirintoUtils.verifica(text, true);
                     Integer linhas = area.getText().split("\n").length;
                     buffer.write(linhas.toString());
                     buffer.newLine();
@@ -60,6 +59,7 @@ public class Janela {
                     JOptionPane.showMessageDialog(fileChooser, "Arquivo salvo com sucesso!");
 
                 } catch (Exception ex) {
+                    log.append("\n");
                     log.append(ex.getMessage());
                 }
             }
@@ -71,6 +71,7 @@ public class Janela {
                 labirinto.resolve();
                 area.setText(labirinto.imprimeLabirinto());
             } catch (Exception ex) {
+                log.append("\n");
                 log.append(ex.getMessage());
             }
         }
@@ -85,16 +86,25 @@ public class Janela {
             char comando = e.getActionCommand().charAt(0);
 
             switch (comando) {
-                case 'A':this.trateClickEmAbrir();break;
-                case 'N':this.trateClickEmNovo();break;
-                case 'S':this.trateClickEmSalvar();break;
-                case 'E':this.trateClickEmExecutar();break;
-                default:break;
+                case 'A':
+                    this.trateClickEmAbrir();
+                    break;
+                case 'N':
+                    this.trateClickEmNovo();
+                    break;
+                case 'S':
+                    this.trateClickEmSalvar();
+                    break;
+                case 'E':
+                    this.trateClickEmExecutar();
+                    break;
+                default:
+                    break;
             }
         }
     }
 
-    public Janela () {
+    public Janela() {
         JPanel botoes = new JPanel();
         JPanel areaEdicao = new JPanel();
         JScrollPane scrollArea = new JScrollPane(areaEdicao);
@@ -103,7 +113,7 @@ public class Janela {
         JScrollPane scrollLog = new JScrollPane(areaLog);
         scrollLog.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-        botoes.setLayout (new GridLayout(1,3));
+        botoes.setLayout(new GridLayout(1, 3));
 
         this.botao[0] = new JButton("Novo Labirinto");
         this.botao[0].addActionListener(new TratadorDeMouse());
@@ -138,14 +148,14 @@ public class Janela {
         this.fileChooser.setAcceptAllFileFilterUsed(false);
         this.fileChooser.setFileFilter(new FileNameExtensionFilter("Arquivo de texto (.txt)", "txt"));
 
-        this.janela.setSize (1030,655);
+        this.janela.setSize(1030, 655);
         this.janela.getContentPane().setLayout(new BorderLayout());
 
-        this.janela.add(botoes,BorderLayout.NORTH);
+        this.janela.add(botoes, BorderLayout.NORTH);
         this.janela.add(scrollArea, BorderLayout.CENTER);
         this.janela.add(scrollLog, BorderLayout.SOUTH);
 
-        this.janela.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
+        this.janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.janela.setVisible(true);
     }
 }
