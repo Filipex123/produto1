@@ -5,6 +5,9 @@ public class Coordenada {
     private int x;
     private int y;
 
+    public Coordenada() {
+    }
+
     public Coordenada(int x, int y) {
         this.x = x;
         this.y = y;
@@ -28,9 +31,27 @@ public class Coordenada {
 
     @Override
     public String toString() {
-        return "Entidades.Coordenada{" +
+        return "Coordenada{" +
                 "x=" + x +
                 ", y=" + y +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if(obj == null) {
+            return false;
+        }
+
+        if(this.getClass() != obj.getClass()) {
+            return false;
+        }
+
+        if(this.x != ((Coordenada) obj).getX() || this.y != ((Coordenada) obj).getY()) {
+            return false;
+        }
+
+        return true;
     }
 }
