@@ -35,8 +35,7 @@ public class Janela {
                 try {
                     area.setText(LabirintoUtils.carregarArquivo(selectedFile));
                 } catch (Exception ex) {
-                    log.append("\n");
-                    log.append(ex.getMessage());
+                   log.append(ex.getMessage());
                 }
             }
         }

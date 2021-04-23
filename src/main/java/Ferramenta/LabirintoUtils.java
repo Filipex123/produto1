@@ -17,7 +17,6 @@ public class LabirintoUtils {
 
     /**
      * Método responsável por carregar um arquivo txt e retorna-lo em String
-     *
      * @param arquivo a ser aberto
      * @return estrutura String de labirinto
      * @throws Exception exceções de validação de arquivo
