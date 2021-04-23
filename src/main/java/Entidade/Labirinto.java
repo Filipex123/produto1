@@ -1,7 +1,5 @@
 package Entidade;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * Entidade de labirinto com as informações dimensionais
  */
@@ -36,7 +34,7 @@ public class Labirinto {
         String[][] labirinto = new String[this.altura][this.largura];
         String[] linhas = data.split("\n");
         for (int i = 0; i < this.altura; i++) {
-            for(int j = 0; j < this.largura; j++) {
+            for (int j = 0; j < this.largura; j++) {
                 labirinto[i][j] = "" + linhas[i].charAt(j);
             }
         }
