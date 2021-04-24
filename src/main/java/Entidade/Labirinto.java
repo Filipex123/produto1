@@ -1,5 +1,7 @@
 package Entidade;
 
+import java.util.Arrays;
+
 /**
  * Entidade de labirinto com as informações dimensionais
  */
@@ -47,7 +49,7 @@ public class Labirinto {
      * @return int valor da altura
      */
     private boolean onSaida() {
-        return this.atual.validaIgualdade(this.saida);
+        return this.atual.equals(this.saida);
     }
 
     /**
@@ -150,5 +152,56 @@ public class Labirinto {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null ) {
+            return false;
+        }
+
+        if (obj.getClass()!=Labirinto.class) {
+            return false;
+        }
+
+        Labirinto labirinto = (Labirinto) obj;
+
+        return altura == labirinto.altura &&
+                largura == labirinto.largura &&
+                entrada.equals(labirinto.entrada) &&
+                saida.equals(labirinto.saida) &&
+                Arrays.deepEquals(mapa, labirinto.mapa) &&
+                atual.equals(labirinto.atual);
+    }
+
+    @Override
+    public int hashCode() {
+        int ret = 69;
+
+        ret = 13*ret + new Byte((byte)this.altura).hashCode();
+        ret = 17*ret + new Byte((byte)this.largura).hashCode();
+        ret = 23*ret + new Byte(String.valueOf(this.atual)).hashCode();
+        ret = 19*ret + new Byte(String.valueOf(this.entrada)).hashCode();
+        ret = 29*ret + new Byte(Arrays.deepToString(this.mapa)).hashCode();
+        ret = 31*ret + new Byte(String.valueOf(this.saida)).hashCode();
+
+        return (ret<0)? -ret : ret;
+    }
+
+    @Override
+    public String toString() {
+        return "Labirinto{" +
+                "entrada=" + entrada +
+                ", saida=" + saida +
+                ", altura=" + altura +
+                ", largura=" + largura +
+                ", mapa=" + Arrays.toString(mapa) +
+                ", atual=" + atual +
+                '}';
     }
 }

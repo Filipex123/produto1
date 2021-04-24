@@ -40,12 +40,18 @@ public class Coordenada {
         return y;
     }
 
-    //TODO javaDoc
+    /**
+     * Método set para o parametro X
+     * @param x int valor de X
+     */
     public void setX(int x) {
         this.x = x;
     }
 
-    //TODO javaDoc
+    /**
+     * Método set para o parametro Y
+     * @param y int valor de Y
+     */
     public void setY(int y) {
         this.y = y;
     }
@@ -55,6 +61,36 @@ public class Coordenada {
         return "{" + x +
                 "," + y +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null ) {
+            return false;
+        }
+
+        if (obj.getClass()!=Coordenada.class) {
+            return false;
+        }
+
+        Coordenada novo = (Coordenada) obj;
+
+        return x == novo.x && y == novo.y;
+    }
+
+    @Override
+    public int hashCode() {
+
+        int ret  = 69;
+
+        ret = 13*ret + new Byte((byte) this.x).hashCode();
+        ret = 17*ret + new Byte((byte) this.y).hashCode();
+
+        return (ret<0)? -ret : ret;
     }
 
     /**

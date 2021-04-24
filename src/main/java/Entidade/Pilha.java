@@ -85,4 +85,34 @@ public class Pilha<T> {
                 ", topo=" + topo +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null ) {
+            return false;
+        }
+
+        if (obj.getClass()!=Pilha.class) {
+            return false;
+        }
+
+        Pilha<?> pilha = (Pilha<?>) obj;
+
+        return topo == pilha.topo &&
+                Arrays.equals(elemento, pilha.elemento);
+    }
+
+    @Override
+    public int hashCode() {
+        int ret = 69;
+
+        ret = 13*ret + new Byte((byte)this.topo).hashCode();
+        ret = 17*ret + new Byte(Arrays.deepToString(this.elemento)).hashCode();
+
+        return (ret<0)? -ret : ret;
+    }
 }
