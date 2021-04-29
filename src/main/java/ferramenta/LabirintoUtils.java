@@ -1,7 +1,7 @@
-package Ferramenta;
+package ferramenta;
 
-import Entidade.Coordenada;
-import Entidade.Labirinto;
+import entidade.Coordenada;
+import entidade.Labirinto;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.BufferedReader;
@@ -66,43 +66,57 @@ public class LabirintoUtils {
     }
 
     public static void verifica(String data, boolean salvando) throws Exception {
-        Pattern pattern = Pattern.compile(salvando?("^[ES#\\s*]+$"):("^[ES#\\s]+$"));
-        Matcher matcher = pattern.matcher(data);
 
-        if (!matcher.matches()) {
-            throw new Exception("Labirinto possui caracteres inválidos");
+        if(StringUtils.isEmpty(data)) {
+            throw new Exception("Área vazia !!!");
         }
 
+        Pattern pattern = Pattern.compile(salvando?("^[ES#\\s*]+$"):("^[ES#\\s]+$"));
+        Matcher matcher = pattern.matcher(data);
+        StringBuilder mensagens = new StringBuilder();
+
+        if (!matcher.matches()) {
+            mensagens.append("Labirinto possui caracteres inválidos\n");
+        }
+
+        boolean saidaValida = false;
+        boolean entradaValida = false;
         if (StringUtils.countMatches(data, "E") != 1) {
-            throw new Exception("Labirinto deve ter exatamente uma entrada");
+            entradaValida = true;
+            mensagens.append("Labirinto deve ter exatamente uma entrada\n");
         }
 
         if (StringUtils.countMatches(data, "S") != 1) {
-            throw new Exception("Labirinto deve ter exatamente uma saída");
+            saidaValida = true;
+            mensagens.append("Labirinto deve ter exatamente uma saída\n");
         }
 
         String[] lista = data.split("\n");
         int tamLinha = lista[0].length();
 
         if (lista.length < 3) {
-            throw new Exception("O número mínimo de linhas deve ser 3");
+            mensagens.append("O número mínimo de linhas deve ser 3\n");
         }
 
-        boolean saidaValida = false;
-        boolean entradaValida = false;
         for (int i = 0; i < lista.length; i++) {
+            if (lista[i].length() < 3) {
+                mensagens.append("O número mínimo de colunas deve ser 3\n");
+            }
+
             if (lista[i].length() != tamLinha) {
-                throw new Exception("Todas as linhas devem ter o mesmo tamanho [linha: " + (i + 1) + "]");
+                mensagens.append("Todas as linhas devem ter o mesmo tamanho [linha: ")
+                        .append(i + 1)
+                        .append("]\n");
             }
 
             if (i == 0 || i == lista.length - 1) {
                 if (lista[i].contains(" ")) {
-                    throw new Exception("Nao pode haver espaço vazio na primeira ou ultima linha");
+                    mensagens.append("Nao pode haver espaço vazio na primeira ou ultima linha\n");
                 }
 
                 if (lista[i].substring(0, 1).contains("E") || lista[i].substring(0, 1).contains("S")
                         || lista[i].substring(tamLinha - 1).contains("E") || lista[i].substring(tamLinha - 1).contains("S")) {
-                    throw new Exception("Entrada e/ou Saida nao podem estar nos cantos");
+                    mensagens.append("Entrada e/ou Saida nao podem estar nos cantos\n");
                 }
 
                 if (lista[i].contains("E")) {
@@ -115,7 +129,9 @@ public class LabirintoUtils {
             } else {
 
                 if (lista[i].substring(0, 1).contains(" ") || lista[i].substring(tamLinha - 1).contains(" ")) {
-                    throw new Exception("Nao pode haver espaço vazio na primeira coluna nem na última coluna [linha: " + (i + 1) + "]");
+                    mensagens.append("Nao pode haver espaço vazio na primeira coluna nem na última coluna [linha: ")
+                            .append(i + 1)
+                            .append("]\n");
                 }
 
                 if (lista[i].substring(0, 1).contains("E") || lista[i].substring(tamLinha - 1).contains("E")) {
@@ -129,11 +145,15 @@ public class LabirintoUtils {
         }
 
         if (!saidaValida) {
-            throw new Exception("Saida (S) está em local inválido");
+            mensagens.append("Saida (S) está em local inválido\n");
         }
 
         if (!entradaValida) {
-            throw new Exception("Entrada (E) está em local inválido");
+            mensagens.append("Entrada (E) está em local inválido\n");
+        }
+
+        if(!StringUtils.isEmpty(mensagens)) {
+            throw new Exception(mensagens.toString());
         }
     }
 }
