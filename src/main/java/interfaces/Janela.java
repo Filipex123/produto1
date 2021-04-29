@@ -1,7 +1,7 @@
 package interfaces;
 
-import Entidade.Labirinto;
-import Ferramenta.LabirintoUtils;
+import entidade.Labirinto;
+import ferramenta.LabirintoUtils;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -15,17 +15,19 @@ import java.io.FileWriter;
 
 public class Janela {
 
-    private JFrame janela = new JFrame("Labirinto");
-    private JTextArea log = new JTextArea("", 8, 140);
-    private JTextArea area = new JTextArea("", 31, 140);
-    private JButton[] botao = new JButton[4];
-    private JFileChooser fileChooser = new JFileChooser();
-    private Labirinto labirinto;
+    private final JFrame janela = new JFrame("Labirinto");
+    private final JTextArea log = new JTextArea("", 8, 140);
+    private final JTextArea area = new JTextArea("", 31, 140);
+    private final JFileChooser fileChooser = new JFileChooser();
+    private final JButton[] botao = new JButton[4];
 
     private class TratadorDeMouse implements ActionListener {
         private File selectedFile;
 
         private void trateClickEmAbrir() {
+            botao[2].setEnabled(true);
+            log.setForeground(Color.BLUE);
+            log.setText("");
             area.setEditable(true);
             int result = fileChooser.showOpenDialog(janela);
             if (result == JFileChooser.APPROVE_OPTION) {
@@ -58,7 +60,9 @@ public class Janela {
                     JOptionPane.showMessageDialog(fileChooser, "Arquivo salvo com sucesso!");
 
                 } catch (Exception ex) {
-                    log.append("\n");
+                    JOptionPane.showMessageDialog(janela, "Não foi possível salvar", "Erro" , JOptionPane.ERROR_MESSAGE);
+                    log.setForeground(Color.RED);
+                    log.setText("");
                     log.append(ex.getMessage());
                 }
             }
@@ -66,18 +70,22 @@ public class Janela {
 
         private void trateClickEmExecutar() {
             try {
-                labirinto = LabirintoUtils.carregaString(area.getText());
-                labirinto.resolve();
+                botao[2].setEnabled(false);
+                Labirinto labirinto = LabirintoUtils.carregaString(area.getText());
+                log.setText(labirinto.resolve());
                 area.setText(labirinto.imprimeLabirinto());
             } catch (Exception ex) {
-                log.append("\n");
+                log.setForeground(Color.RED);
+                log.setText("");
                 log.append(ex.getMessage());
             }
         }
 
         private void trateClickEmNovo() {
+            botao[2].setEnabled(true);
             area.setEditable(true);
             area.setText("");
+            log.setText("");
         }
 
         @Override
@@ -110,22 +118,23 @@ public class Janela {
         scrollArea.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         JPanel areaLog = new JPanel();
         JScrollPane scrollLog = new JScrollPane(areaLog);
-        scrollLog.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollLog.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         botoes.setLayout(new GridLayout(1, 3));
 
-        this.botao[0] = new JButton("Novo Labirinto");
-        this.botao[0].addActionListener(new TratadorDeMouse());
-        botoes.add(this.botao[0]);
-        this.botao[1] = new JButton("Abrir Labirinto");
-        this.botao[1].addActionListener(new TratadorDeMouse());
-        botoes.add(this.botao[1]);
-        this.botao[2] = new JButton("Salvar Arquivo de Labirinto");
-        this.botao[2].addActionListener(new TratadorDeMouse());
-        botoes.add(this.botao[2]);
-        this.botao[3] = new JButton("Executar Labirinto");
-        this.botao[3].addActionListener(new TratadorDeMouse());
-        botoes.add(this.botao[3]);
+        botao[0] = new JButton("Novo Labirinto");
+        botao[0].addActionListener(new TratadorDeMouse());
+        botoes.add(botao[0]);
+        botao[1] = new JButton("Abrir Labirinto");
+        botao[1].addActionListener(new TratadorDeMouse());
+        botoes.add(botao[1]);
+        botao[2] = new JButton("Salvar Arquivo de Labirinto");
+        botao[2].addActionListener(new TratadorDeMouse());
+        botao[2].setEnabled(false);
+        botoes.add(botao[2]);
+        botao[3] = new JButton("Executar Labirinto");
+        botao[3].addActionListener(new TratadorDeMouse());
+        botoes.add(botao[3]);
 
         //set de painel de area de edicao
         Border borderArea = BorderFactory.createLineBorder(Color.BLACK, 1);
@@ -139,7 +148,8 @@ public class Janela {
         this.log.setEditable(false);
         this.log.setBackground(Color.LIGHT_GRAY);
         this.log.setBorder(border);
-        this.log.setForeground(Color.RED);
+        this.log.setForeground(Color.BLUE);
+        this.log.setLayout(new GridBagLayout());
         this.log.setFont(new Font("Courier New", Font.BOLD, 14));
         areaLog.add(this.log);
 
@@ -152,9 +162,12 @@ public class Janela {
 
         this.janela.add(botoes, BorderLayout.NORTH);
         this.janela.add(scrollArea, BorderLayout.CENTER);
+        scrollLog.setPreferredSize(new Dimension(300,180));
         this.janela.add(scrollLog, BorderLayout.SOUTH);
 
         this.janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.janela.setVisible(true);
+
+        this.janela.pack();
     }
 }
