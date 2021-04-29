@@ -122,7 +122,7 @@ public class Labirinto {
         return lab.toString();
     }
 
-    public void resolve() throws Exception {
+    public String resolve() throws Exception {
 
         final int tamanhoLab = this.altura * this.largura;
         boolean progressivo = true;
@@ -130,6 +130,7 @@ public class Labirinto {
         Pilha<Coordenada> caminhos = new Pilha<Coordenada>(tamanhoLab);
         Pilha<Coordenada> adjacentes = new Pilha<Coordenada>(3);
         Pilha<Pilha<Coordenada>> possibilidades = new Pilha(tamanhoLab);
+        StringBuilder caminhoResolvido = new StringBuilder();
 
         while (!this.onSaida()) {
             if (progressivo) adjacentes = this.getAdjacentes();
@@ -152,6 +153,24 @@ public class Labirinto {
                 }
             }
         }
+
+        Pilha<Coordenada> caminhoAux = new Pilha<Coordenada>(tamanhoLab);
+        while (!caminhos.isVazia()) {
+            caminhoAux.guardeUmElemento(caminhos.recupereUmElemento());
+            caminhos.retireUmElemento();
+        }
+
+        int cont = 0;
+        while (!caminhoAux.isVazia()) {
+            if(cont % 13 == 0) {
+                caminhoResolvido.append("\n");
+            }
+            caminhoResolvido.append(caminhoAux.recupereUmElemento().toString()).append(" - ");
+            caminhoAux.retireUmElemento();
+            cont++;
+        }
+
+        return caminhoResolvido.toString();
     }
 
     @Override
