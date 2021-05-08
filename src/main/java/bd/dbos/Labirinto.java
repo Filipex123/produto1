@@ -84,4 +84,18 @@ public class Labirinto implements Cloneable {
                 + "\n   Conteúdo: " + this.conteudo
                 + "\n}";
     }
+
+    @Override
+    public int hashCode() {
+
+        int ret = 666;
+
+        ret = 13*ret + this.nome.hashCode();
+        ret = 13*ret + this.identificador.hashCode();
+        ret = 13*ret + this.dataCriacao.hashCode();
+        ret = 13*ret + this.dataEdicao.hashCode();
+        ret = 13*ret + this.conteudo.hashCode();
+
+        return (ret<0)? -ret : ret;
+    }
 }
