@@ -10,6 +10,71 @@ public class Labirinto implements Cloneable {
     private LocalDateTime dataEdicao;
     private String conteudo;
 
+    public String getNome() {
+        return this.nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getIdentificador() {
+        return this.identificador;
+    }
+
+    public void setIdentificador(String identificador) {
+        this.identificador = identificador;
+    }
+
+    public LocalDateTime getDataCriacao() {
+        return this.dataCriacao;
+    }
+
+    public void setDataCriacao(LocalDateTime dataCriacao) {
+        this.dataCriacao = dataCriacao;
+    }
+
+    public LocalDateTime getDataEdicao() {
+        return this.dataEdicao;
+    }
+
+    public void setDataEdicao(LocalDateTime dataEdicao) {
+        this.dataEdicao = dataEdicao;
+    }
+
+    public String getConteudo() {
+        return this.conteudo;
+    }
+
+    public void setConteudo(String conteudo) {
+        this.conteudo = conteudo;
+    }
+    public Labirinto(){
+
+    }
+    public Labirinto (Labirinto modelo){
+        this.nome = modelo.nome;
+        this.identificador = modelo.identificador;
+        this.dataCriacao = modelo.dataCriacao;
+        this.dataEdicao = modelo.dataEdicao;
+        this.conteudo = modelo.conteudo;
+    }
+
+    @Override
+    public Object clone ()
+    {
+        Labirinto ret = null;
+
+        try
+        {
+            ret = new Labirinto(this);
+        }
+        catch (Exception erro)
+        {}
+
+        return ret;
+    }
+
     @Override
     public String toString(){
         return "{\n   Nome do Labirinto: " + this.nome
@@ -34,24 +99,30 @@ public class Labirinto implements Cloneable {
         return (ret<0)? -ret : ret;
     }
 
+    @Override
     public boolean equals(Object obj) {
-        if(this == obj){
+
+        if(this == obj) {
             return true;
         }
-        if(obj == null){
+
+        if(obj == null) {
             return false;
         }
-        if(!(obj instaceof Labirinto)){
+
+        if(!(obj instanceof Labirinto)) {
             return false;
         }
+
         Labirinto lab = (Labirinto)obj;
-        if(this.nome != lab.nome && this.identificador != lab.identificiador && this.dataCriacao.isEqual(obj.dataCriacao) && this.dataEdicao.isEqual(obj.dataEdicao)  
-           && this.conteudo != lab.conteudo){
+
+        if(!this.nome.equals(lab.nome)
+                && !this.identificador.equals(lab.identificador)
+                && this.dataCriacao.isEqual(((Labirinto) obj).dataCriacao)
+                && this.dataEdicao.isEqual(((Labirinto) obj).dataEdicao)
+                && !this.conteudo.equals(lab.conteudo)){
             return false;
         }
         return true;
-        
-     
-        
     }
 }
