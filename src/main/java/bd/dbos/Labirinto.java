@@ -31,6 +31,6 @@ public class Labirinto implements Cloneable {
         ret = 13*ret + this.dataEdicao.hashCode();
         ret = 13*ret + this.conteudo.hashCode();
 
-        return ret;
+        return (ret<0)? -ret : ret;
     }
 }
