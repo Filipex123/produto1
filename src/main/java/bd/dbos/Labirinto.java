@@ -49,7 +49,16 @@ public class Labirinto implements Cloneable {
     public void setConteudo(String conteudo) {
         this.conteudo = conteudo;
     }
+    public Labirinto(){
 
+    }
+    public Labirinto (Labirinto modelo){
+        this.nome = modelo.nome;
+        this.identificador = modelo.identificador;
+        this.dataCriacao = modelo.dataCriacao;
+        this.dataEdicao = modelo.dataEdicao;
+        this.conteudo = modelo.conteudo;
+    }
 
     @Override
     public Object clone ()
