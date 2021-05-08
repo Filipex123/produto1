@@ -12,12 +12,11 @@ public class Labirinto implements Cloneable {
 
     @Override
     public String toString(){
-        String ret = "{\n   Nome do Labirinto: " + this.nome
+        return "{\n   Nome do Labirinto: " + this.nome
                 + "\n   IP do cliente: " + this.identificador
                 + "\n   Data de Criação: " + this.dataCriacao
                 + "\n   Data de Edicao: " + this.dataEdicao
                 + "\n   Conteúdo: " + this.conteudo
                 + "\n}";
-        return ret;
     }
 }
