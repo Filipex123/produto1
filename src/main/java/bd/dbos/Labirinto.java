@@ -1,5 +1,6 @@
 package bd.dbos;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
 
 public class Labirinto implements Cloneable {
@@ -22,24 +23,13 @@ public class Labirinto implements Cloneable {
         return this.identificador;
     }
 
-    public void setIdentificador(String identificador) {
-        this.identificador = identificador;
-    }
 
     public LocalDateTime getDataCriacao() {
-        return this.dataCriacao;
-    }
-
-    public void setDataCriacao(LocalDateTime dataCriacao) {
-        this.dataCriacao = dataCriacao;
+        return dataCriacao;
     }
 
     public LocalDateTime getDataEdicao() {
-        return this.dataEdicao;
-    }
-
-    public void setDataEdicao(LocalDateTime dataEdicao) {
-        this.dataEdicao = dataEdicao;
+        return dataEdicao;
     }
 
     public String getConteudo() {
@@ -49,9 +39,17 @@ public class Labirinto implements Cloneable {
     public void setConteudo(String conteudo) {
         this.conteudo = conteudo;
     }
-    public Labirinto(){
 
+    public Labirinto(){}
+
+    public Labirinto(String nome, String identificador, LocalDateTime dataCriacao, LocalDateTime dataEdicao, String conteudo) {
+        this.nome = nome;
+        this.identificador = identificador;
+        this.dataCriacao = dataCriacao;
+        this.dataEdicao = dataEdicao;
+        this.conteudo = conteudo;
     }
+
     public Labirinto (Labirinto modelo){
         this.nome = modelo.nome;
         this.identificador = modelo.identificador;
@@ -118,8 +116,8 @@ public class Labirinto implements Cloneable {
 
         if(!this.nome.equals(lab.nome)
                 && !this.identificador.equals(lab.identificador)
-                && this.dataCriacao.isEqual(((Labirinto) obj).dataCriacao)
-                && this.dataEdicao.isEqual(((Labirinto) obj).dataEdicao)
+                && !this.dataCriacao.equals(((Labirinto) obj).dataCriacao)
+                && !this.dataEdicao.equals(((Labirinto) obj).dataEdicao)
                 && !this.conteudo.equals(lab.conteudo)){
             return false;
         }
