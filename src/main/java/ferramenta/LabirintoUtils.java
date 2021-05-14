@@ -1,7 +1,7 @@
 package ferramenta;
 
 import entidade.Coordenada;
-import entidade.Labirinto;
+import entidade.LabirintoEntity;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.BufferedReader;
@@ -42,7 +42,7 @@ public class LabirintoUtils {
         return data.toString();
     }
 
-    public static Labirinto carregaString(String data) throws Exception {
+    public static LabirintoEntity carregaString(String data) throws Exception {
 
         verifica(data, false);
         String[] linhas = data.split("\n");
@@ -62,7 +62,7 @@ public class LabirintoUtils {
             }
         }
 
-        return new Labirinto(linhas.length, linhas[0].length(), cEntrada, cSaida, data);
+        return new LabirintoEntity(linhas.length, linhas[0].length(), cEntrada, cSaida, data);
     }
 
     public static void verifica(String data, boolean salvando) throws Exception {

@@ -1,9 +1,8 @@
 package bd.dbos;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
-public class Labirinto implements Cloneable {
+public class LabirintoDBO implements Cloneable {
 
     private String nome;
     private String identificador;
@@ -23,7 +22,6 @@ public class Labirinto implements Cloneable {
         return this.identificador;
     }
 
-
     public LocalDateTime getDataCriacao() {
         return dataCriacao;
     }
@@ -40,9 +38,9 @@ public class Labirinto implements Cloneable {
         this.conteudo = conteudo;
     }
 
-    public Labirinto(){}
+    public LabirintoDBO(){}
 
-    public Labirinto(String nome, String identificador, LocalDateTime dataCriacao, LocalDateTime dataEdicao, String conteudo) {
+    public LabirintoDBO(String nome, String identificador, LocalDateTime dataCriacao, LocalDateTime dataEdicao, String conteudo) {
         this.nome = nome;
         this.identificador = identificador;
         this.dataCriacao = dataCriacao;
@@ -50,7 +48,7 @@ public class Labirinto implements Cloneable {
         this.conteudo = conteudo;
     }
 
-    public Labirinto (Labirinto modelo){
+    public LabirintoDBO(LabirintoDBO modelo){
         this.nome = modelo.nome;
         this.identificador = modelo.identificador;
         this.dataCriacao = modelo.dataCriacao;
@@ -61,11 +59,11 @@ public class Labirinto implements Cloneable {
     @Override
     public Object clone ()
     {
-        Labirinto ret = null;
+        LabirintoDBO ret = null;
 
         try
         {
-            ret = new Labirinto(this);
+            ret = new LabirintoDBO(this);
         }
         catch (Exception erro)
         {}
@@ -108,16 +106,16 @@ public class Labirinto implements Cloneable {
             return false;
         }
 
-        if(!(obj instanceof Labirinto)) {
+        if(!(obj instanceof LabirintoDBO)) {
             return false;
         }
 
-        Labirinto lab = (Labirinto)obj;
+        LabirintoDBO lab = (LabirintoDBO)obj;
 
         if(!this.nome.equals(lab.nome)
                 && !this.identificador.equals(lab.identificador)
-                && !this.dataCriacao.equals(((Labirinto) obj).dataCriacao)
-                && !this.dataEdicao.equals(((Labirinto) obj).dataEdicao)
+                && !this.dataCriacao.equals(((LabirintoDBO) obj).dataCriacao)
+                && !this.dataEdicao.equals(((LabirintoDBO) obj).dataEdicao)
                 && !this.conteudo.equals(lab.conteudo)){
             return false;
         }

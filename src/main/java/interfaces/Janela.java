@@ -1,6 +1,6 @@
 package interfaces;
 
-import entidade.Labirinto;
+import entidade.LabirintoEntity;
 import ferramenta.LabirintoUtils;
 
 import javax.swing.*;
@@ -71,9 +71,9 @@ public class Janela {
         private void trateClickEmExecutar() {
             try {
                 botao[2].setEnabled(false);
-                Labirinto labirinto = LabirintoUtils.carregaString(area.getText());
-                log.setText(labirinto.resolve());
-                area.setText(labirinto.imprimeLabirinto());
+                LabirintoEntity labirintoEntity = LabirintoUtils.carregaString(area.getText());
+                log.setText(labirintoEntity.resolve());
+                area.setText(labirintoEntity.imprimeLabirinto());
             } catch (Exception ex) {
                 log.setForeground(Color.RED);
                 log.setText("");

@@ -1,7 +1,7 @@
 package bd.daos;
 
 import bd.core.MariaDBUtils;
-import bd.dbos.Labirinto;
+import bd.dbos.LabirintoDBO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,9 +9,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Labirintos {
+public class LabirintoDAO {
 
-    public static Labirinto getLabirinto(String nome, String identificador) throws Exception {
+    public static LabirintoDBO getLabirinto(String nome, String identificador) throws Exception {
 
         try {
             Connection conn = MariaDBUtils.getConexao();
@@ -29,7 +29,7 @@ public class Labirintos {
 
             ps.close();
 
-            return new Labirinto(resultado.getString("nome"),
+            return new LabirintoDBO(resultado.getString("nome"),
                     resultado.getString("identificador"),
                     resultado.getTimestamp("dataCriacao").toLocalDateTime(),
                     resultado.getTimestamp("dataEdicao").toLocalDateTime(),
@@ -40,7 +40,7 @@ public class Labirintos {
         }
     }
 
-    public static List<Labirinto> getLabirintos() throws Exception {
+    public static List<LabirintoDBO> getLabirintos() throws Exception {
 
         try {
             Connection conn = MariaDBUtils.getConexao();
@@ -55,22 +55,22 @@ public class Labirintos {
             if (!resultado.first())
                 throw new Exception ("Nenhum elemento encontrado");
 
-            List<Labirinto> labirintos = new ArrayList<>();
+            List<LabirintoDBO> labirintoDBOS = new ArrayList<>();
             while (resultado.next()) {
-                labirintos.add(new Labirinto(resultado.getString("nome"),
+                labirintoDBOS.add(new LabirintoDBO(resultado.getString("nome"),
                         resultado.getString("identificador"),
                         resultado.getTimestamp("dataCriacao").toLocalDateTime(),
                         resultado.getTimestamp("dataEdicao").toLocalDateTime(),
                         resultado.getString("conteudo")));
             }
 
-            return labirintos;
+            return labirintoDBOS;
         } catch (Exception ex) {
             throw new Exception ("Erro ao procurar labirinto: ["+ex+"]");
         }
     }
 
-    public static boolean insert(Labirinto lab) throws Exception {
+    public static boolean insert(LabirintoDBO lab) throws Exception {
 
         try {
             Connection conn = MariaDBUtils.getConexao();
@@ -94,7 +94,7 @@ public class Labirintos {
 
     }
 
-    public static boolean update(Labirinto lab) throws Exception {
+    public static boolean update(LabirintoDBO lab) throws Exception {
 
         try {
             Connection conn = MariaDBUtils.getConexao();
@@ -118,7 +118,7 @@ public class Labirintos {
         }
     }
 
-    public static boolean delete(Labirinto lab) throws Exception {
+    public static boolean delete(LabirintoDBO lab) throws Exception {
 
         try {
             Connection conn = MariaDBUtils.getConexao();
