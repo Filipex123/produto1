@@ -1,3 +1,5 @@
+package network;
+
 import interfaces.Janela;
 
 /**
@@ -8,7 +10,7 @@ import interfaces.Janela;
  * @author Leonardo Guedes
  * @author Pedro Denilson
  */
-public class Main {
+public class Cliente {
     public static void main(String[] args) {
         try {
             new Janela();
