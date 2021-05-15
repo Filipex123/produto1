@@ -17,6 +17,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Janela {
 
@@ -72,15 +76,31 @@ public class Janela {
                             comunicado = (Comunicado)conexao.espie();
                         }
                         while (!(comunicado instanceof RespostaLabirintos));
-
                         RespostaLabirintos res = (RespostaLabirintos)comunicado;
-                        res.getLabirintos().forEach(item -> log.append(item.toString()));
+
+                        ArrayList<String> labs = new ArrayList<>();
+
+                        res.getLabirintos().forEach(item -> {
+                            labs.add(item.getNome());
+                        });
+
+                        JComboBox<String> labOptions = new JComboBox<>(labs.toArray(new String[0]));
+
+                        JOptionPane.showConfirmDialog(null, labOptions, "Escolha ai", JOptionPane.DEFAULT_OPTION);
+
+                        String labTexto = res.getLabirintos().get(labOptions.getSelectedIndex()).getConteudo()
+                                .replaceAll("[0-9]", "")
+                                .replaceFirst("\n", "");
+
+                        area.setText(labTexto);
+
+                        /*res.getLabirintos().forEach(item -> log.append(item.toString()));
 
                         String labTexto = res.getLabirintos().get(2).getConteudo()
                                 .replaceAll("[0-9]", "")
                                 .replaceFirst("\n", "");
 
-                        area.setText(labTexto);
+                        area.setText(labTexto);*/
 
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(
@@ -119,26 +139,26 @@ public class Janela {
                         buffer.newLine();
                         buffer.write(text);
                         buffer.flush();
-                        JOptionPane.showMessageDialog(fileChooser, "Arquivo salvo com sucesso!");
+
                     }
                 }else if (escolha == 1){
+                    identificador = getIndentificador();
+                    if (validaIdentificacao(identificador)) {
+                        throw new Exception("Identificador Inválido");
+                    }
                     String nomeLab = JOptionPane.showInputDialog("Digite o nome do labirinto:");
                     if (validaIdentificacao(nomeLab)) {
                         throw new Exception("Nome Inválido Inválido");
                     }
 
-                    if(identificador != null){
+                    UsuarioConexao conexao = getConexaoNuvem();
 
-                        UsuarioConexao conexao = getConexaoNuvem();
-
-                        String textoSalvar = linhas + "\n" + text;
-                        conexao.receba(new PedidoSalvamento(new LabirintoDBO(nomeLab, identificador, textoSalvar)));
-
-                    }else{
-
-                    }
+                    String textoSalvar = linhas + "\n" + text;
+                    conexao.receba(new PedidoSalvamento(new LabirintoDBO(nomeLab, identificador, textoSalvar)));
 
                 }
+
+                JOptionPane.showMessageDialog(null, "Labirinto salvo com sucesso!");
 
             } catch (Exception ex){
                 JOptionPane.showMessageDialog(
@@ -150,7 +170,6 @@ public class Janela {
                 log.setText("");
                 log.append(ex.getMessage());
             }
-
 
         }
 
@@ -311,5 +330,12 @@ public class Janela {
 
     private boolean validaIdentificacao(String valor){
         return valor.replaceAll("\\s", "").equals("");
+    }
+
+    private String getIndentificador(){
+        if(this.identificador != null)
+            return this.identificador;
+
+        return JOptionPane.showInputDialog("Digite seu identificador/email");
     }
 }
