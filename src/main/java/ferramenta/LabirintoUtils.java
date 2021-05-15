@@ -44,7 +44,7 @@ public class LabirintoUtils {
 
     public static LabirintoEntity carregaString(String data) throws Exception {
 
-        verifica(data, false);
+        verifica(data);
         String[] linhas = data.split("\n");
 
         Coordenada cEntrada = new Coordenada();
@@ -65,13 +65,13 @@ public class LabirintoUtils {
         return new LabirintoEntity(linhas.length, linhas[0].length(), cEntrada, cSaida, data);
     }
 
-    public static void verifica(String data, boolean salvando) throws Exception {
+    public static void verifica(String data) throws Exception {
 
         if(StringUtils.isEmpty(data)) {
             throw new Exception("Área vazia !!!");
         }
 
-        Pattern pattern = Pattern.compile(salvando?("^[ES#\\s*]+$"):("^[ES#\\s]+$"));
+        Pattern pattern = Pattern.compile("^[ES#\\s]+$");
         Matcher matcher = pattern.matcher(data);
         StringBuilder mensagens = new StringBuilder();
 

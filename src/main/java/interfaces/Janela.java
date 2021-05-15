@@ -25,47 +25,63 @@ public class Janela {
         private File selectedFile;
 
         private void trateClickEmAbrir() {
+            String[] opcoes = {"Local", "Em Nuvem"};
+            int escolha = JOptionPane.showOptionDialog(
+                    null,
+                    "Onde deseja abrir o labirinto?",
+                    "Onde Abrir?",
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoes, opcoes[0]);
+
             botao[2].setEnabled(true);
             log.setForeground(Color.BLUE);
             log.setText("");
             area.setEditable(true);
-            int result = fileChooser.showOpenDialog(janela);
-            if (result == JFileChooser.APPROVE_OPTION) {
-                selectedFile = fileChooser.getSelectedFile();
-                log.append("\nArquivo selecionado: " + selectedFile.getAbsolutePath());
-
-                try {
-                    area.setText(LabirintoUtils.carregarArquivo(selectedFile));
-                } catch (Exception ex) {
-                   log.append(ex.getMessage());
+            if(escolha == 0){
+                int result = fileChooser.showOpenDialog(janela);
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    selectedFile = fileChooser.getSelectedFile();
+                    log.append("\nArquivo selecionado: " + selectedFile.getAbsolutePath());
+                    try {
+                        area.setText(LabirintoUtils.carregarArquivo(selectedFile));
+                    } catch (Exception ex) {
+                        log.append(ex.getMessage());
+                    }
                 }
+            } else if (escolha == 1) {
+                System.out.println("Abrir Labirinto em nuvem");
             }
         }
 
         private void trateClickEmSalvar() {
-            int result = fileChooser.showSaveDialog(janela);
-            if (result == JFileChooser.APPROVE_OPTION) {
-                selectedFile = fileChooser.getSelectedFile();
-                try {
+            try{
+                String text = area.getText();
+                LabirintoUtils.verifica(text);
+                int result = fileChooser.showSaveDialog(janela);
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    selectedFile = fileChooser.getSelectedFile();
                     FileWriter writer = new FileWriter(selectedFile);
                     BufferedWriter buffer = new BufferedWriter(writer);
 
-                    String text = area.getText();
-                    LabirintoUtils.verifica(text, true);
+
                     Integer linhas = area.getText().split("\n").length;
                     buffer.write(linhas.toString());
                     buffer.newLine();
                     buffer.write(text);
                     buffer.flush();
                     JOptionPane.showMessageDialog(fileChooser, "Arquivo salvo com sucesso!");
-
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(janela, "Não foi possível salvar", "Erro" , JOptionPane.ERROR_MESSAGE);
-                    log.setForeground(Color.RED);
-                    log.setText("");
-                    log.append(ex.getMessage());
                 }
+            } catch (Exception ex){
+                JOptionPane.showMessageDialog(
+                        janela,
+                        "Não foi possível salvar.\n Confira o Log de Erros.",
+                        "Erro" ,
+                        JOptionPane.ERROR_MESSAGE);
+                log.setForeground(Color.RED);
+                log.setText("");
+                log.append(ex.getMessage());
             }
+
+
         }
 
         private void trateClickEmExecutar() {
