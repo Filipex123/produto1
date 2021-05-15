@@ -48,7 +48,25 @@ public class Janela {
                     }
                 }
             } else if (escolha == 1) {
-                System.out.println("Abrir Labirinto em nuvem");
+                String login = JOptionPane.showInputDialog("Digite seu identificador/email");
+                if(login != null) {
+                    try {
+                        if (login.replaceAll("\\s", "").equals("")) {
+                            throw new Exception("Identificar Inválido");
+                        }
+
+
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(
+                                janela,
+                                "Identificar Inválido.",
+                                "Erro",
+                                JOptionPane.ERROR_MESSAGE);
+                        log.setForeground(Color.RED);
+                        log.setText("");
+                        log.append(ex.getMessage());
+                    }
+                }
             }
         }
 
