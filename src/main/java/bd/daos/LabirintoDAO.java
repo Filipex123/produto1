@@ -11,7 +11,7 @@ import java.util.List;
 
 public class LabirintoDAO {
 
-    public static LabirintoDBO getLabirinto(String identificador) throws Exception {
+    public static List<LabirintoDBO> getLabirinto(String identificador) throws Exception {
 
         try {
             Connection conn = MariaDBUtils.getConexao();
@@ -23,17 +23,21 @@ public class LabirintoDAO {
             ps.setString(1, identificador);
 
             ResultSet resultado = ps.executeQuery();
+            ps.close();
 
             if (!resultado.first())
                 throw new Exception ("Nao cadastrado");
 
-            ps.close();
+            List<LabirintoDBO> labirintoDBOS = new ArrayList<>();
+            do {
+                labirintoDBOS.add(new LabirintoDBO(resultado.getString("nome"),
+                        resultado.getString("identificador"),
+                        resultado.getTimestamp("dataCriacao").toLocalDateTime(),
+                        resultado.getTimestamp("dataEdicao").toLocalDateTime(),
+                        resultado.getString("conteudo")));
+            } while (resultado.next());
 
-            return new LabirintoDBO(resultado.getString("nome"),
-                    resultado.getString("identificador"),
-                    resultado.getTimestamp("dataCriacao").toLocalDateTime(),
-                    resultado.getTimestamp("dataEdicao").toLocalDateTime(),
-                    resultado.getString("conteudo"));
+            return labirintoDBOS;
 
         } catch (Exception ex) {
             throw new Exception ("Erro ao procurar labirinto: ["+ex+"]");
@@ -56,13 +60,13 @@ public class LabirintoDAO {
                 throw new Exception ("Nenhum elemento encontrado");
 
             List<LabirintoDBO> labirintoDBOS = new ArrayList<>();
-            while (resultado.next()) {
+            do {
                 labirintoDBOS.add(new LabirintoDBO(resultado.getString("nome"),
                         resultado.getString("identificador"),
                         resultado.getTimestamp("dataCriacao").toLocalDateTime(),
                         resultado.getTimestamp("dataEdicao").toLocalDateTime(),
                         resultado.getString("conteudo")));
-            }
+            } while (resultado.next());
 
             return labirintoDBOS;
         } catch (Exception ex) {

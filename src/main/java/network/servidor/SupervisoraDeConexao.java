@@ -74,8 +74,7 @@ public class SupervisoraDeConexao extends Thread {
 		        }
                 else if (comunicado instanceof PedidoLabirintos) {
                     PedidoLabirintos entradinha = (PedidoLabirintos)comunicado;
-					this.usuario.receba(new RespostaLabirintos(
-					        Collections.singletonList(LabirintoDAO.getLabirinto(entradinha.getIdCliente()))));
+					this.usuario.receba(new RespostaLabirintos(LabirintoDAO.getLabirinto(entradinha.getIdCliente())));
                 }
             }
         } catch (Exception erro) {

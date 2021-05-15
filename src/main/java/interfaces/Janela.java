@@ -2,6 +2,10 @@ package interfaces;
 
 import entidade.LabirintoEntity;
 import ferramenta.LabirintoUtils;
+import network.entidade.Comunicado;
+import network.entidade.PedidoLabirintos;
+import network.entidade.RespostaLabirintos;
+import network.servidor.UsuarioConexao;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -9,13 +13,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
+import java.io.*;
+import java.net.Socket;
 
 public class Janela {
 
-    private final JFrame janela = new JFrame("Labirinto");
+    private final JFrame janela = new JFrame("Editor de Labirinto");
     private final JTextArea log = new JTextArea("", 8, 140);
     private final JTextArea area = new JTextArea("", 31, 140);
     private final JFileChooser fileChooser = new JFileChooser();
@@ -56,6 +59,19 @@ public class Janela {
                             throw new Exception("Identificar Inválido");
                         }
 
+                        UsuarioConexao conexao = getConexaoNuvem();
+
+                        conexao.receba(new PedidoLabirintos(login));
+
+                        Comunicado comunicado = null;
+                        do {
+                            comunicado = (Comunicado)conexao.espie();
+                        }
+                        while (!(comunicado instanceof RespostaLabirintos));
+
+                        RespostaLabirintos res = (RespostaLabirintos)comunicado;
+                        res.getLabirintos().forEach(item -> log.append(item.toString()));
+
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(
                                 janela,
@@ -74,20 +90,31 @@ public class Janela {
             try{
                 String text = area.getText();
                 LabirintoUtils.verifica(text);
-                int result = fileChooser.showSaveDialog(janela);
-                if (result == JFileChooser.APPROVE_OPTION) {
-                    selectedFile = fileChooser.getSelectedFile();
-                    FileWriter writer = new FileWriter(selectedFile);
-                    BufferedWriter buffer = new BufferedWriter(writer);
+                Integer linhas = area.getText().split("\n").length;
+                String[] opcoes = {"Local", "Em Nuvem"};
+                int escolha = JOptionPane.showOptionDialog(
+                        null,
+                        "Onde deseja salvar o labirinto?",
+                        "Onde Salvar?",
+                        JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoes, opcoes[0]);
 
+                if(escolha == 0){
+                    int result = fileChooser.showSaveDialog(janela);
+                    if (result == JFileChooser.APPROVE_OPTION) {
+                        selectedFile = fileChooser.getSelectedFile();
+                        FileWriter writer = new FileWriter(selectedFile);
+                        BufferedWriter buffer = new BufferedWriter(writer);
 
-                    Integer linhas = area.getText().split("\n").length;
-                    buffer.write(linhas.toString());
-                    buffer.newLine();
-                    buffer.write(text);
-                    buffer.flush();
-                    JOptionPane.showMessageDialog(fileChooser, "Arquivo salvo com sucesso!");
+                        buffer.write(linhas.toString());
+                        buffer.newLine();
+                        buffer.write(text);
+                        buffer.flush();
+                        JOptionPane.showMessageDialog(fileChooser, "Arquivo salvo com sucesso!");
+                    }
+                }else if (escolha == 1){
+                    // TODO -> Lógica de Salvamento de Labirinto no Banco
                 }
+
             } catch (Exception ex){
                 JOptionPane.showMessageDialog(
                         janela,
@@ -127,6 +154,7 @@ public class Janela {
         private void trateClickEmRestaurar(){
             String text = area.getText().replaceAll("\\*", " ");
             area.setText(text);
+            botao[2].setEnabled(true);
             botao[4].setEnabled(false);
         }
 
@@ -218,5 +246,41 @@ public class Janela {
         this.janela.setVisible(true);
 
         this.janela.pack();
+    }
+
+    private UsuarioConexao getConexaoNuvem(){
+        Socket conexao = null;
+        try {
+            conexao = new Socket("localhost", 2021);
+        } catch (Exception ex) {
+            System.err.println ("Indique o servidor e a porta corretos!\n");
+        }
+
+        ObjectOutputStream transmissor=null;
+        try {
+            transmissor = new ObjectOutputStream(conexao.getOutputStream());
+        }
+        catch (Exception erro) {
+            System.err.println ("Indique o servidor e a porta corretos!\n");
+        }
+
+        ObjectInputStream receptor=null;
+        try {
+            receptor = new ObjectInputStream(conexao.getInputStream());
+        }
+        catch (Exception erro) {
+            System.err.println ("Indique o servidor e a porta corretos!\n");
+
+        }
+
+        UsuarioConexao servidor=null;
+        try {
+            servidor = new UsuarioConexao(conexao, receptor, transmissor);
+        }
+        catch (Exception erro) {
+            System.err.println ("Indique o servidor e a porta corretos!\n");
+        }
+
+        return servidor;
     }
 }
