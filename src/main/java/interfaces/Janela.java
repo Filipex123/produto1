@@ -19,7 +19,7 @@ public class Janela {
     private final JTextArea log = new JTextArea("", 8, 140);
     private final JTextArea area = new JTextArea("", 31, 140);
     private final JFileChooser fileChooser = new JFileChooser();
-    private final JButton[] botao = new JButton[4];
+    private final JButton[] botao = new JButton[5];
 
     private class TratadorDeMouse implements ActionListener {
         private File selectedFile;
@@ -33,6 +33,7 @@ public class Janela {
                     JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoes, opcoes[0]);
 
             botao[2].setEnabled(true);
+            botao[4].setEnabled(false);
             log.setForeground(Color.BLUE);
             log.setText("");
             area.setEditable(true);
@@ -54,7 +55,6 @@ public class Janela {
                         if (login.replaceAll("\\s", "").equals("")) {
                             throw new Exception("Identificar Inválido");
                         }
-
 
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(
@@ -108,6 +108,7 @@ public class Janela {
                 LabirintoEntity labirintoEntity = LabirintoUtils.carregaString(area.getText());
                 log.setText(labirintoEntity.resolve());
                 area.setText(labirintoEntity.imprimeLabirinto());
+                botao[4].setEnabled(true);
             } catch (Exception ex) {
                 log.setForeground(Color.RED);
                 log.setText("");
@@ -117,9 +118,16 @@ public class Janela {
 
         private void trateClickEmNovo() {
             botao[2].setEnabled(true);
+            botao[4].setEnabled(false);
             area.setEditable(true);
             area.setText("");
             log.setText("");
+        }
+
+        private void trateClickEmRestaurar(){
+            String text = area.getText().replaceAll("\\*", " ");
+            area.setText(text);
+            botao[4].setEnabled(false);
         }
 
         @Override
@@ -138,6 +146,9 @@ public class Janela {
                     break;
                 case 'E':
                     this.trateClickEmExecutar();
+                    break;
+                case 'R':
+                    this.trateClickEmRestaurar();
                     break;
                 default:
                     break;
@@ -162,13 +173,17 @@ public class Janela {
         botao[1] = new JButton("Abrir Labirinto");
         botao[1].addActionListener(new TratadorDeMouse());
         botoes.add(botao[1]);
-        botao[2] = new JButton("Salvar Arquivo de Labirinto");
-        botao[2].addActionListener(new TratadorDeMouse());
-        botao[2].setEnabled(false);
-        botoes.add(botao[2]);
         botao[3] = new JButton("Executar Labirinto");
         botao[3].addActionListener(new TratadorDeMouse());
         botoes.add(botao[3]);
+        botao[2] = new JButton("Salvar Labirinto");
+        botao[2].addActionListener(new TratadorDeMouse());
+        botao[2].setEnabled(false);
+        botoes.add(botao[2]);
+        botao[4] = new JButton("Restaurar Labirinto");
+        botao[4].addActionListener(new TratadorDeMouse());
+        botao[4].setEnabled(false);
+        botoes.add(botao[4]);
 
         //set de painel de area de edicao
         Border borderArea = BorderFactory.createLineBorder(Color.BLACK, 1);
