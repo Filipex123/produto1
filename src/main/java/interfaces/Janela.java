@@ -18,9 +18,6 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class Janela {
 
@@ -93,14 +90,6 @@ public class Janela {
                                 .replaceFirst("\n", "");
 
                         area.setText(labTexto);
-
-                        /*res.getLabirintos().forEach(item -> log.append(item.toString()));
-
-                        String labTexto = res.getLabirintos().get(2).getConteudo()
-                                .replaceAll("[0-9]", "")
-                                .replaceFirst("\n", "");
-
-                        area.setText(labTexto);*/
 
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(
