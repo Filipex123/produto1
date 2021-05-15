@@ -1,8 +1,9 @@
 package bd.dbos;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class LabirintoDBO implements Cloneable {
+public class LabirintoDBO implements Cloneable, Serializable {
 
     private String nome;
     private String identificador;

@@ -11,16 +11,16 @@ import java.util.List;
 
 public class LabirintoDAO {
 
-    public static LabirintoDBO getLabirinto(String nome, String identificador) throws Exception {
+    public static LabirintoDBO getLabirinto(String identificador) throws Exception {
 
         try {
             Connection conn = MariaDBUtils.getConexao();
 
-            String sql = "SELECT * FROM Labirinto WHERE nome = ? AND identificador = ?";
+            String sql = "SELECT * FROM Labirinto WHERE identificador = ?";
 
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, nome);
-            ps.setString(2, identificador);
+//            ps.setString(1, nome);
+            ps.setString(1, identificador);
 
             ResultSet resultado = ps.executeQuery();
 

@@ -1,6 +1,8 @@
-package network.entidade;
+package network.servidor;
 
 import bd.dbos.LabirintoDBO;
+import network.entidade.Comunicado;
+
 
 import java.util.ArrayList;
 
