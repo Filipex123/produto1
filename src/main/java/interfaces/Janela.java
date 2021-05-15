@@ -1,9 +1,11 @@
 package interfaces;
 
+import bd.dbos.LabirintoDBO;
 import entidade.LabirintoEntity;
 import ferramenta.LabirintoUtils;
 import network.entidade.Comunicado;
 import network.entidade.PedidoLabirintos;
+import network.entidade.PedidoSalvamento;
 import network.entidade.RespostaLabirintos;
 import network.servidor.UsuarioConexao;
 
@@ -23,6 +25,8 @@ public class Janela {
     private final JTextArea area = new JTextArea("", 31, 140);
     private final JFileChooser fileChooser = new JFileChooser();
     private final JButton[] botao = new JButton[5];
+
+    private String identificador = null;
 
     private class TratadorDeMouse implements ActionListener {
         private File selectedFile;
@@ -52,16 +56,16 @@ public class Janela {
                     }
                 }
             } else if (escolha == 1) {
-                String login = JOptionPane.showInputDialog("Digite seu identificador/email");
-                if(login != null) {
+                identificador = JOptionPane.showInputDialog("Digite seu identificador/email");
+                if(identificador != null) {
                     try {
-                        if (login.replaceAll("\\s", "").equals("")) {
+                        if (validaIdentificacao(identificador)) {
                             throw new Exception("Identificar Inválido");
                         }
 
                         UsuarioConexao conexao = getConexaoNuvem();
 
-                        conexao.receba(new PedidoLabirintos(login));
+                        conexao.receba(new PedidoLabirintos(identificador));
 
                         Comunicado comunicado = null;
                         do {
@@ -71,6 +75,12 @@ public class Janela {
 
                         RespostaLabirintos res = (RespostaLabirintos)comunicado;
                         res.getLabirintos().forEach(item -> log.append(item.toString()));
+
+                        String labTexto = res.getLabirintos().get(2).getConteudo()
+                                .replaceAll("[0-9]", "")
+                                .replaceFirst("\n", "");
+
+                        area.setText(labTexto);
 
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(
@@ -112,7 +122,22 @@ public class Janela {
                         JOptionPane.showMessageDialog(fileChooser, "Arquivo salvo com sucesso!");
                     }
                 }else if (escolha == 1){
-                    // TODO -> Lógica de Salvamento de Labirinto no Banco
+                    String nomeLab = JOptionPane.showInputDialog("Digite o nome do labirinto:");
+                    if (validaIdentificacao(nomeLab)) {
+                        throw new Exception("Nome Inválido Inválido");
+                    }
+
+                    if(identificador != null){
+
+                        UsuarioConexao conexao = getConexaoNuvem();
+
+                        String textoSalvar = linhas + "\n" + text;
+                        conexao.receba(new PedidoSalvamento(new LabirintoDBO(nomeLab, identificador, textoSalvar)));
+
+                    }else{
+
+                    }
+
                 }
 
             } catch (Exception ex){
@@ -282,5 +307,9 @@ public class Janela {
         }
 
         return servidor;
+    }
+
+    private boolean validaIdentificacao(String valor){
+        return valor.replaceAll("\\s", "").equals("");
     }
 }

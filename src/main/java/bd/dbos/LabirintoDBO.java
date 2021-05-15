@@ -49,6 +49,12 @@ public class LabirintoDBO implements Cloneable, Serializable {
         this.conteudo = conteudo;
     }
 
+    public LabirintoDBO(String nome, String identificador, String conteudo) {
+        this.nome = nome;
+        this.identificador = identificador;
+        this.conteudo = conteudo;
+    }
+
     public LabirintoDBO(LabirintoDBO modelo){
         this.nome = modelo.nome;
         this.identificador = modelo.identificador;
