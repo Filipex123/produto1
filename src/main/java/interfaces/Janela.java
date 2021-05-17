@@ -28,7 +28,6 @@ public class Janela {
     private final JButton[] botao = new JButton[5];
 
     private String identificador = null;
-
     private class TratadorDeMouse implements ActionListener {
         private File selectedFile;
 
@@ -128,7 +127,7 @@ public class Janela {
                         buffer.newLine();
                         buffer.write(text);
                         buffer.flush();
-
+                        JOptionPane.showMessageDialog(null, "Labirinto salvo com sucesso!");
                     }
                 }else if (escolha == 1){
                     identificador = getIndentificador();
@@ -137,22 +136,20 @@ public class Janela {
                     }
                     String nomeLab = JOptionPane.showInputDialog("Digite o nome do labirinto:");
                     if (validaIdentificacao(nomeLab)) {
-                        throw new Exception("Nome Inválido Inválido");
+                        throw new Exception("Nome Inválido");
                     }
 
                     UsuarioConexao conexao = getConexaoNuvem();
 
                     String textoSalvar = linhas + "\n" + text;
                     conexao.receba(new PedidoSalvamento(new LabirintoDBO(nomeLab, identificador, textoSalvar)));
-
+                    JOptionPane.showMessageDialog(null, "Labirinto salvo com sucesso!");
                 }
-
-                JOptionPane.showMessageDialog(null, "Labirinto salvo com sucesso!");
 
             } catch (Exception ex){
                 JOptionPane.showMessageDialog(
                         janela,
-                        "Não foi possível salvar.\n Confira o Log de Erros.",
+                        "Não foi possível salvar.\nConfira o Log de Erros.",
                         "Erro" ,
                         JOptionPane.ERROR_MESSAGE);
                 log.setForeground(Color.RED);
@@ -283,38 +280,19 @@ public class Janela {
 
     private UsuarioConexao getConexaoNuvem(){
         Socket conexao = null;
+        ObjectOutputStream transmissor = null;
+        ObjectInputStream receptor = null;
+        UsuarioConexao servidor = null;
         try {
             conexao = new Socket("localhost", 2021);
-        } catch (Exception ex) {
-            System.err.println ("Indique o servidor e a porta corretos!\n");
-        }
-
-        ObjectOutputStream transmissor=null;
-        try {
             transmissor = new ObjectOutputStream(conexao.getOutputStream());
-        }
-        catch (Exception erro) {
-            System.err.println ("Indique o servidor e a porta corretos!\n");
-        }
-
-        ObjectInputStream receptor=null;
-        try {
             receptor = new ObjectInputStream(conexao.getInputStream());
-        }
-        catch (Exception erro) {
-            System.err.println ("Indique o servidor e a porta corretos!\n");
-
-        }
-
-        UsuarioConexao servidor=null;
-        try {
             servidor = new UsuarioConexao(conexao, receptor, transmissor);
+            return servidor;
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return null;
         }
-        catch (Exception erro) {
-            System.err.println ("Indique o servidor e a porta corretos!\n");
-        }
-
-        return servidor;
     }
 
     private boolean validaIdentificacao(String valor){
