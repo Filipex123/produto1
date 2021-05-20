@@ -14,6 +14,7 @@ public class Resultado extends Comunicado {
         return labirintoResultante;
     }
 
+    @Override
     public String toString ()
     {
         return (""+this.labirintoResultante);

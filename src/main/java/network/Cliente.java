@@ -1,15 +1,7 @@
 package network;
 
 import interfaces.Janela;
-import network.entidade.Comunicado;
-import network.entidade.PedidoLabirintos;
-import network.entidade.RespostaLabirintos;
-import network.entidade.Resultado;
-import network.servidor.UsuarioConexao;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 
 /**
  * Classe main onde carrega e resolve o labirinto
