@@ -67,7 +67,7 @@ public class UsuarioConexao {
             return ret;
         }
         catch (Exception erro) {
-            throw new Exception ("Erro de recepcao");
+            throw new Exception ("Erro de recepcao [\"+erro+\"]");
         }
     }
 
@@ -81,5 +81,9 @@ public class UsuarioConexao {
         catch (Exception erro) {
             throw new Exception ("Erro de desconexao");
         }
+    }
+
+    public Socket getConexao(){
+        return this.conexao;
     }
 }

@@ -44,19 +44,30 @@ public class Servidor {
                     ComunicadoDeDesligamento comunicadoDeDesligamento = new ComunicadoDeDesligamento ();
 
                     for (UsuarioConexao usuario:usuarios) {
-                        try {
-                            usuario.receba(comunicadoDeDesligamento);
-                            usuario.adeus();
+                        if(!usuario.getConexao().isClosed()){
+                            try {
+                                usuario.receba(comunicadoDeDesligamento);
+                                usuario.adeus();
+                            }
+                            catch (Exception erro) {}
                         }
-                        catch (Exception erro) {}
                     }
                 }
-
                 System.out.println ("O servidor foi desativado!\n");
                 System.exit(0);
             }
-            else
+            else if(comando.toLowerCase().equals("ls")){
+                // Lista conexões ativas (não closeds)
+                usuarios.forEach(item -> {
+                    if(!item.getConexao().isClosed()){
+                        System.out.print("| 1 |");
+                    }
+                });
+
+            }
+            else{
                 System.err.println ("Comando invalido!\n");
+            }
         }
     }
 }

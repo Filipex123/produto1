@@ -3,10 +3,7 @@ package interfaces;
 import bd.dbos.LabirintoDBO;
 import entidade.LabirintoEntity;
 import ferramenta.LabirintoUtils;
-import network.entidade.Comunicado;
-import network.entidade.PedidoLabirintos;
-import network.entidade.PedidoSalvamento;
-import network.entidade.RespostaLabirintos;
+import network.entidade.*;
 import network.servidor.UsuarioConexao;
 
 import javax.swing.*;
@@ -15,6 +12,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -28,11 +27,52 @@ public class Janela {
     private final JButton[] botao = new JButton[5];
 
     private String identificador = null;
+    private UsuarioConexao conexao;
+
+    private class VerificaConexao extends Thread implements Runnable {
+        public VerificaConexao() throws Exception{
+            while(true){
+                sleep(2000);
+                if(conexao == null){
+                    conexao = getConexaoNuvem();
+                    if(conexao != null){
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "O servidor foi ligado.\nAs funções ABRIR e SALVAR também funcionarão em nuvem.",
+                                "Servidor Online",
+                                JOptionPane.NO_OPTION);
+                    }
+                }
+                else {
+                    try{
+                        Comunicado comunicado = null;
+                        comunicado = (Comunicado)conexao.espie();
+                        if(comunicado instanceof ComunicadoDeDesligamento){
+                            conexao = null;
+                            JOptionPane.showMessageDialog(
+                                    null,
+                                    "O servidor foi desligado.\nAs funções ABRIR e SALVAR funcionarão apenas localmente.",
+                                    "Servidor Offline",
+                                    JOptionPane.NO_OPTION);
+                        }
+                    } catch (Exception ex){
+                        conexao = null;
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "O servidor foi desligado.\nAs funções ABRIR e SALVAR funcionarão apenas localmente.",
+                                "Servidor Offline",
+                                JOptionPane.NO_OPTION);
+                    }
+                }
+            }
+        }
+    }
+
     private class TratadorDeMouse implements ActionListener {
         private File selectedFile;
 
         private void trateClickEmAbrir() {
-            String[] opcoes = {"Local", "Em Nuvem"};
+            String[] opcoes = conexao != null ? new String[]{"Local", "Em Nuvem"} : new String[]{"Local"};
             int escolha = JOptionPane.showOptionDialog(
                     null,
                     "Onde deseja abrir o labirinto?",
@@ -109,7 +149,7 @@ public class Janela {
                 String text = area.getText();
                 LabirintoUtils.verifica(text);
                 Integer linhas = area.getText().split("\n").length;
-                String[] opcoes = {"Local", "Em Nuvem"};
+                String[] opcoes = conexao != null ? new String[]{"Local", "Em Nuvem"} : new String[]{"Local"};
                 int escolha = JOptionPane.showOptionDialog(
                         null,
                         "Onde deseja salvar o labirinto?",
@@ -214,7 +254,16 @@ public class Janela {
         }
     }
 
-    public Janela() {
+    public Janela() throws Exception {
+        this.conexao = this.getConexaoNuvem();
+        if(conexao == null){
+            JOptionPane.showMessageDialog(
+                    null,
+                    "O servidor está offline.\nAs funções ABRIR e SALVAR só funcionarão localmente.",
+                    "Servidor Offline",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+
         JPanel botoes = new JPanel();
         JPanel areaEdicao = new JPanel();
         JScrollPane scrollArea = new JScrollPane(areaEdicao);
@@ -272,10 +321,26 @@ public class Janela {
         scrollLog.setPreferredSize(new Dimension(300,180));
         this.janela.add(scrollLog, BorderLayout.SOUTH);
 
-        this.janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.janela.setVisible(true);
+        this.janela.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                try {
+                    conexao.getConexao().close();
+                    System.exit(0);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
 
+        this.janela.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+        this.janela.setVisible(true);
         this.janela.pack();
+
+        Thread thread = new Thread(new VerificaConexao());
+        thread.start();
+
+
     }
 
     private UsuarioConexao getConexaoNuvem(){
