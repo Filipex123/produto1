@@ -18,36 +18,42 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
+/**
+ * Classe responsável por montar a interface gráfica
+ */
 public class Janela {
 
     private final JFrame janela = new JFrame("Editor de Labirinto");
-    private final JTextArea log = new JTextArea("", 8, 140);
-    private final JTextArea area = new JTextArea("", 31, 140);
-    private final JFileChooser fileChooser = new JFileChooser();
-    private final JButton[] botao = new JButton[5];
+    private final JTextArea areaLog = new JTextArea("", 8, 140);
+    private final JTextArea areaTexto = new JTextArea("", 31, 140);
+    private final JFileChooser exploradorDeArquivos = new JFileChooser();
+    private final JButton[] botoesMenu = new JButton[5];
 
     private String identificador = null;
     private UsuarioConexao conexao;
 
+    /**
+     * Thread responsável por verificar conexão com o servidor,
+     * caso seja ligado em meio a execução ou desligado abruptamente
+     */
     private class VerificaConexao extends Thread implements Runnable {
-        public VerificaConexao() throws Exception{
-            while(true){
+        public VerificaConexao() throws Exception {
+            while (true) {
                 sleep(2000);
-                if(conexao == null){
+                if (conexao == null) {
                     conexao = getConexaoNuvem();
-                    if(conexao != null){
+                    if (conexao != null) {
                         JOptionPane.showMessageDialog(
                                 null,
                                 "O servidor foi ligado.\nAs funções ABRIR e SALVAR também funcionarão em nuvem.",
                                 "Servidor Online",
                                 JOptionPane.NO_OPTION);
                     }
-                }
-                else {
-                    try{
+                } else {
+                    try {
                         Comunicado comunicado = null;
-                        comunicado = (Comunicado)conexao.espie();
-                        if(comunicado instanceof ComunicadoDeDesligamento){
+                        comunicado = (Comunicado) conexao.espie();
+                        if (comunicado instanceof ComunicadoDeDesligamento) {
                             conexao = null;
                             JOptionPane.showMessageDialog(
                                     null,
@@ -55,7 +61,7 @@ public class Janela {
                                     "Servidor Offline",
                                     JOptionPane.NO_OPTION);
                         }
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
                         conexao = null;
                         JOptionPane.showMessageDialog(
                                 null,
@@ -68,6 +74,9 @@ public class Janela {
         }
     }
 
+    /**
+     * Tratador de clique nos botões do menu da aplicação
+     */
     private class TratadorDeMouse implements ActionListener {
         private File selectedFile;
 
@@ -79,25 +88,25 @@ public class Janela {
                     "Onde Abrir?",
                     JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoes, opcoes[0]);
 
-            botao[2].setEnabled(true);
-            botao[4].setEnabled(false);
-            log.setForeground(Color.BLUE);
-            log.setText("");
-            area.setEditable(true);
-            if(escolha == 0){
-                int result = fileChooser.showOpenDialog(janela);
+            botoesMenu[2].setEnabled(true);
+            botoesMenu[4].setEnabled(false);
+            areaLog.setForeground(Color.BLUE);
+            areaLog.setText("");
+            areaTexto.setEditable(true);
+            if (escolha == 0) {
+                int result = exploradorDeArquivos.showOpenDialog(janela);
                 if (result == JFileChooser.APPROVE_OPTION) {
-                    selectedFile = fileChooser.getSelectedFile();
-                    log.append("\nArquivo selecionado: " + selectedFile.getAbsolutePath());
+                    selectedFile = exploradorDeArquivos.getSelectedFile();
+                    areaLog.append("\nArquivo selecionado: " + selectedFile.getAbsolutePath());
                     try {
-                        area.setText(LabirintoUtils.carregarArquivo(selectedFile));
+                        areaTexto.setText(LabirintoUtils.carregarArquivo(selectedFile));
                     } catch (Exception ex) {
-                        log.append(ex.getMessage());
+                        areaLog.append(ex.getMessage());
                     }
                 }
             } else if (escolha == 1) {
                 identificador = JOptionPane.showInputDialog("Digite seu identificador/email");
-                if(identificador != null) {
+                if (identificador != null) {
                     try {
                         if (validaIdentificacao(identificador)) {
                             throw new Exception("Identificar Inválido");
@@ -109,10 +118,10 @@ public class Janela {
 
                         Comunicado comunicado = null;
                         do {
-                            comunicado = (Comunicado)conexao.espie();
+                            comunicado = (Comunicado) conexao.espie();
                         }
                         while (!(comunicado instanceof RespostaLabirintos));
-                        RespostaLabirintos res = (RespostaLabirintos)comunicado;
+                        RespostaLabirintos res = (RespostaLabirintos) comunicado;
 
                         ArrayList<String> labs = new ArrayList<>();
 
@@ -128,7 +137,7 @@ public class Janela {
                                 .replaceAll("[0-9]", "")
                                 .replaceFirst("\n", "");
 
-                        area.setText(labTexto);
+                        areaTexto.setText(labTexto);
 
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(
@@ -136,19 +145,19 @@ public class Janela {
                                 "Identificar Inválido.",
                                 "Erro",
                                 JOptionPane.ERROR_MESSAGE);
-                        log.setForeground(Color.RED);
-                        log.setText("");
-                        log.append(ex.getMessage());
+                        areaLog.setForeground(Color.RED);
+                        areaLog.setText("");
+                        areaLog.append(ex.getMessage());
                     }
                 }
             }
         }
 
         private void trateClickEmSalvar() {
-            try{
-                String text = area.getText();
+            try {
+                String text = areaTexto.getText();
                 LabirintoUtils.verifica(text);
-                Integer linhas = area.getText().split("\n").length;
+                Integer linhas = areaTexto.getText().split("\n").length;
                 String[] opcoes = conexao != null ? new String[]{"Local", "Em Nuvem"} : new String[]{"Local"};
                 int escolha = JOptionPane.showOptionDialog(
                         null,
@@ -156,10 +165,10 @@ public class Janela {
                         "Onde Salvar?",
                         JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoes, opcoes[0]);
 
-                if(escolha == 0){
-                    int result = fileChooser.showSaveDialog(janela);
+                if (escolha == 0) {
+                    int result = exploradorDeArquivos.showSaveDialog(janela);
                     if (result == JFileChooser.APPROVE_OPTION) {
-                        selectedFile = fileChooser.getSelectedFile();
+                        selectedFile = exploradorDeArquivos.getSelectedFile();
                         FileWriter writer = new FileWriter(selectedFile);
                         BufferedWriter buffer = new BufferedWriter(writer);
 
@@ -169,7 +178,7 @@ public class Janela {
                         buffer.flush();
                         JOptionPane.showMessageDialog(null, "Labirinto salvo com sucesso!");
                     }
-                }else if (escolha == 1){
+                } else if (escolha == 1) {
                     identificador = getIndentificador();
                     if (validaIdentificacao(identificador)) {
                         throw new Exception("Identificador Inválido");
@@ -186,46 +195,46 @@ public class Janela {
                     JOptionPane.showMessageDialog(null, "Labirinto salvo com sucesso!");
                 }
 
-            } catch (Exception ex){
+            } catch (Exception ex) {
                 JOptionPane.showMessageDialog(
                         janela,
                         "Não foi possível salvar.\nConfira o Log de Erros.",
-                        "Erro" ,
+                        "Erro",
                         JOptionPane.ERROR_MESSAGE);
-                log.setForeground(Color.RED);
-                log.setText("");
-                log.append(ex.getMessage());
+                areaLog.setForeground(Color.RED);
+                areaLog.setText("");
+                areaLog.append(ex.getMessage());
             }
 
         }
 
         private void trateClickEmExecutar() {
             try {
-                botao[2].setEnabled(false);
-                LabirintoEntity labirintoEntity = LabirintoUtils.carregaString(area.getText());
-                log.setText(labirintoEntity.resolve());
-                area.setText(labirintoEntity.imprimeLabirinto());
-                botao[4].setEnabled(true);
+                botoesMenu[2].setEnabled(false);
+                LabirintoEntity labirintoEntity = LabirintoUtils.carregaString(areaTexto.getText());
+                areaLog.setText(labirintoEntity.resolve());
+                areaTexto.setText(labirintoEntity.imprimeLabirinto());
+                botoesMenu[4].setEnabled(true);
             } catch (Exception ex) {
-                log.setForeground(Color.RED);
-                log.setText("");
-                log.append(ex.getMessage());
+                areaLog.setForeground(Color.RED);
+                areaLog.setText("");
+                areaLog.append(ex.getMessage());
             }
         }
 
         private void trateClickEmNovo() {
-            botao[2].setEnabled(true);
-            botao[4].setEnabled(false);
-            area.setEditable(true);
-            area.setText("");
-            log.setText("");
+            botoesMenu[2].setEnabled(true);
+            botoesMenu[4].setEnabled(false);
+            areaTexto.setEditable(true);
+            areaTexto.setText("");
+            areaLog.setText("");
         }
 
-        private void trateClickEmRestaurar(){
-            String text = area.getText().replaceAll("\\*", " ");
-            area.setText(text);
-            botao[2].setEnabled(true);
-            botao[4].setEnabled(false);
+        private void trateClickEmRestaurar() {
+            String text = areaTexto.getText().replaceAll("\\*", " ");
+            areaTexto.setText(text);
+            botoesMenu[2].setEnabled(true);
+            botoesMenu[4].setEnabled(false);
         }
 
         @Override
@@ -254,9 +263,14 @@ public class Janela {
         }
     }
 
+    /**
+     * Contrutor da interface
+     *
+     * @throws Exception exceção de abertura da aplicação
+     */
     public Janela() throws Exception {
         this.conexao = this.getConexaoNuvem();
-        if(conexao == null){
+        if (conexao == null) {
             JOptionPane.showMessageDialog(
                     null,
                     "O servidor está offline.\nAs funções ABRIR e SALVAR só funcionarão localmente.",
@@ -274,51 +288,51 @@ public class Janela {
 
         botoes.setLayout(new GridLayout(1, 3));
 
-        botao[0] = new JButton("Novo Labirinto");
-        botao[0].addActionListener(new TratadorDeMouse());
-        botoes.add(botao[0]);
-        botao[1] = new JButton("Abrir Labirinto");
-        botao[1].addActionListener(new TratadorDeMouse());
-        botoes.add(botao[1]);
-        botao[3] = new JButton("Executar Labirinto");
-        botao[3].addActionListener(new TratadorDeMouse());
-        botoes.add(botao[3]);
-        botao[2] = new JButton("Salvar Labirinto");
-        botao[2].addActionListener(new TratadorDeMouse());
-        botao[2].setEnabled(false);
-        botoes.add(botao[2]);
-        botao[4] = new JButton("Restaurar Labirinto");
-        botao[4].addActionListener(new TratadorDeMouse());
-        botao[4].setEnabled(false);
-        botoes.add(botao[4]);
+        this.botoesMenu[0] = new JButton("Novo Labirinto");
+        this.botoesMenu[0].addActionListener(new TratadorDeMouse());
+        botoes.add(this.botoesMenu[0]);
+        this.botoesMenu[1] = new JButton("Abrir Labirinto");
+        this.botoesMenu[1].addActionListener(new TratadorDeMouse());
+        botoes.add(this.botoesMenu[1]);
+        this.botoesMenu[3] = new JButton("Executar Labirinto");
+        this.botoesMenu[3].addActionListener(new TratadorDeMouse());
+        botoes.add(this.botoesMenu[3]);
+        this.botoesMenu[2] = new JButton("Salvar Labirinto");
+        this.botoesMenu[2].addActionListener(new TratadorDeMouse());
+        this.botoesMenu[2].setEnabled(false);
+        botoes.add(this.botoesMenu[2]);
+        this.botoesMenu[4] = new JButton("Restaurar Labirinto");
+        this.botoesMenu[4].addActionListener(new TratadorDeMouse());
+        this.botoesMenu[4].setEnabled(false);
+        botoes.add(this.botoesMenu[4]);
 
         //set de painel de area de edicao
         Border borderArea = BorderFactory.createLineBorder(Color.BLACK, 1);
-        this.area.setBorder(borderArea);
-        this.area.setFont(new Font("Courier New", Font.BOLD, 16));
-        this.area.setEditable(false);
-        areaEdicao.add(this.area);
+        this.areaTexto.setBorder(borderArea);
+        this.areaTexto.setFont(new Font("Courier New", Font.BOLD, 16));
+        this.areaTexto.setEditable(false);
+        areaEdicao.add(this.areaTexto);
 
         //set de painel de area de log
         Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
-        this.log.setEditable(false);
-        this.log.setBackground(Color.LIGHT_GRAY);
-        this.log.setBorder(border);
-        this.log.setForeground(Color.BLUE);
-        this.log.setLayout(new GridBagLayout());
-        this.log.setFont(new Font("Courier New", Font.BOLD, 14));
-        areaLog.add(this.log);
+        this.areaLog.setEditable(false);
+        this.areaLog.setBackground(Color.LIGHT_GRAY);
+        this.areaLog.setBorder(border);
+        this.areaLog.setForeground(Color.BLUE);
+        this.areaLog.setLayout(new GridBagLayout());
+        this.areaLog.setFont(new Font("Courier New", Font.BOLD, 14));
+        areaLog.add(this.areaLog);
 
-        this.fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-        this.fileChooser.setAcceptAllFileFilterUsed(false);
-        this.fileChooser.setFileFilter(new FileNameExtensionFilter("Arquivo de texto (.txt)", "txt"));
+        this.exploradorDeArquivos.setCurrentDirectory(new File(System.getProperty("user.home")));
+        this.exploradorDeArquivos.setAcceptAllFileFilterUsed(false);
+        this.exploradorDeArquivos.setFileFilter(new FileNameExtensionFilter("Arquivo de texto (.txt)", "txt"));
 
         this.janela.setSize(1030, 655);
         this.janela.getContentPane().setLayout(new BorderLayout());
 
         this.janela.add(botoes, BorderLayout.NORTH);
         this.janela.add(scrollArea, BorderLayout.CENTER);
-        scrollLog.setPreferredSize(new Dimension(300,180));
+        scrollLog.setPreferredSize(new Dimension(300, 180));
         this.janela.add(scrollLog, BorderLayout.SOUTH);
 
         this.janela.addWindowListener(new WindowAdapter() {
@@ -339,11 +353,14 @@ public class Janela {
 
         Thread thread = new Thread(new VerificaConexao());
         thread.start();
-
-
     }
 
-    private UsuarioConexao getConexaoNuvem(){
+    /**
+     * Método para criar conexão com o servidor
+     *
+     * @return UsuarioConexao entidade de conexão com o servidor
+     */
+    private UsuarioConexao getConexaoNuvem() {
         Socket conexao = null;
         ObjectOutputStream transmissor = null;
         ObjectInputStream receptor = null;
@@ -360,12 +377,23 @@ public class Janela {
         }
     }
 
-    private boolean validaIdentificacao(String valor){
+    /**
+     * Método de validação de campos de entrada
+     *
+     * @param valor valor a ser validado
+     * @return resultado da validação
+     */
+    private boolean validaIdentificacao(String valor) {
         return valor.replaceAll("\\s", "").equals("");
     }
 
-    private String getIndentificador(){
-        if(this.identificador != null)
+    /**
+     * Verifica se há um identificador
+     *
+     * @return o identificador
+     */
+    private String getIndentificador() {
+        if (this.identificador != null)
             return this.identificador;
 
         return JOptionPane.showInputDialog("Digite seu identificador/email");
