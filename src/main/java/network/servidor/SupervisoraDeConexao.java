@@ -1,7 +1,6 @@
 package network.servidor;
 
 import bd.daos.LabirintoDAO;
-import bd.dbos.LabirintoDBO;
 import network.entidade.Comunicado;
 import network.entidade.PedidoLabirintos;
 import network.entidade.PedidoSalvamento;
@@ -11,7 +10,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class SupervisoraDeConexao extends Thread {
 
@@ -74,7 +72,7 @@ public class SupervisoraDeConexao extends Thread {
 		        }
                 else if (comunicado instanceof PedidoLabirintos) {
                     PedidoLabirintos entradinha = (PedidoLabirintos)comunicado;
-					this.usuario.receba(new RespostaLabirintos(LabirintoDAO.getLabirinto(entradinha.getIdCliente())));
+					this.usuario.receba(new RespostaLabirintos(LabirintoDAO.getLabirintosByIdentificador(entradinha.getIdCliente())));
                 }
             }
         } catch (Exception erro) {

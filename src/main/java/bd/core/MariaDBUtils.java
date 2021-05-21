@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * Classe utils para conexão com MariaDB
+ */
 public class MariaDBUtils {
 
     static final String JDBC_DRIVER = "org.mariadb.jdbc.Driver";

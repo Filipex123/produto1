@@ -3,6 +3,9 @@ package bd.dbos;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/**
+ * Entidade de modelo do banco referente a tabela Labirinto
+ */
 public class LabirintoDBO implements Cloneable, Serializable {
 
     private String nome;
@@ -11,36 +14,55 @@ public class LabirintoDBO implements Cloneable, Serializable {
     private LocalDateTime dataEdicao;
     private String conteudo;
 
+    /**
+     * Método para pegar o valor de Nome
+     * @return String nome do labirinto
+     */
     public String getNome() {
         return this.nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
+    /**
+     * Método para pegar o valor do identificador
+     * @return String nome do identificador
+     */
     public String getIdentificador() {
         return this.identificador;
     }
 
+    /**
+     * Método para pegar o valor da data de criação do labirinto
+     * @return LocalDateTime data de criação do labirinto
+     */
     public LocalDateTime getDataCriacao() {
         return dataCriacao;
     }
 
+    /**
+     * Método para pegar o valor da data de edição do labirinto
+     * @return LocalDateTime data de edição do labirinto
+     */
     public LocalDateTime getDataEdicao() {
         return dataEdicao;
     }
 
+    /**
+     * Método para pegar o valor do conteúdo do labirinto
+     * @return String valor do conteúdo do labirinto
+     */
     public String getConteudo() {
         return this.conteudo;
     }
 
-    public void setConteudo(String conteudo) {
-        this.conteudo = conteudo;
-    }
-
-    public LabirintoDBO(){}
-
+    /**
+     * Construtor completo para retorno do banco
+     *
+     * @param nome nome do labirinto
+     * @param identificador identificador do labirinto
+     * @param dataCriacao data de criação do labirinto
+     * @param dataEdicao data de edição do labirinto
+     * @param conteudo conteúdo do labirinto
+     */
     public LabirintoDBO(String nome, String identificador, LocalDateTime dataCriacao, LocalDateTime dataEdicao, String conteudo) {
         this.nome = nome;
         this.identificador = identificador;
@@ -49,12 +71,23 @@ public class LabirintoDBO implements Cloneable, Serializable {
         this.conteudo = conteudo;
     }
 
+    /**
+     * Construtor com informações a serem inseridas no banco
+     *
+     * @param nome nome do labirinto
+     * @param identificador identificador do labirinto
+     * @param conteudo conteúdo do labirinto
+     */
     public LabirintoDBO(String nome, String identificador, String conteudo) {
         this.nome = nome;
         this.identificador = identificador;
         this.conteudo = conteudo;
     }
 
+    /**
+     * Construtor de cópia
+     * @param modelo objeto a ser copiado
+     */
     public LabirintoDBO(LabirintoDBO modelo){
         this.nome = modelo.nome;
         this.identificador = modelo.identificador;
@@ -63,6 +96,11 @@ public class LabirintoDBO implements Cloneable, Serializable {
         this.conteudo = modelo.conteudo;
     }
 
+    /**
+     * Método para clone de Labirinto
+     *
+     * @return Object do labirinto clonado
+     */
     @Override
     public Object clone ()
     {
@@ -78,6 +116,10 @@ public class LabirintoDBO implements Cloneable, Serializable {
         return ret;
     }
 
+    /**
+     * Método para impressão customizada do Labirinto
+     * @return String impressão do objeto Labirinto
+     */
     @Override
     public String toString(){
         return "{\n   Nome do Labirinto: " + this.nome
@@ -88,6 +130,10 @@ public class LabirintoDBO implements Cloneable, Serializable {
                 + "\n}";
     }
 
+    /**
+     * Método hashCoode de Labirinto
+     * @return int hash code
+     */
     @Override
     public int hashCode() {
 
@@ -102,6 +148,11 @@ public class LabirintoDBO implements Cloneable, Serializable {
         return (ret<0)? -ret : ret;
     }
 
+    /**
+     * Método equals para o Labirinto
+     * @param obj outro objeto a ser comparado
+     * @return boolean do resultado
+     */
     @Override
     public boolean equals(Object obj) {
 
