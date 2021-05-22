@@ -42,6 +42,13 @@ public class LabirintoUtils {
         return data.toString();
     }
 
+    /**
+     * Método para carregar uma string em objeto Labirinto
+     *
+     * @param data String do conteudo do labirinto
+     * @return LabirintoEntity objeto de labirinto
+     * @throws Exception validação de labirinto válido
+     */
     public static LabirintoEntity carregaString(String data) throws Exception {
 
         verifica(data);
@@ -65,6 +72,11 @@ public class LabirintoUtils {
         return new LabirintoEntity(linhas.length, linhas[0].length(), cEntrada, cSaida, data);
     }
 
+    /**
+     * Método que realiza todas as validações sobre o labirinto
+     * @param data conteudo do labirinto
+     * @throws Exception validação de entrada
+     */
     public static void verifica(String data) throws Exception {
 
         if(StringUtils.isEmpty(data)) {

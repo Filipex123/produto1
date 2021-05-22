@@ -8,11 +8,11 @@ import java.time.LocalDateTime;
  */
 public class LabirintoDBO implements Cloneable, Serializable {
 
-    private String nome;
-    private String identificador;
-    private LocalDateTime dataCriacao;
-    private LocalDateTime dataEdicao;
-    private String conteudo;
+    private final String nome;
+    private final String identificador;
+    private final LocalDateTime dataCriacao;
+    private final LocalDateTime dataEdicao;
+    private final String conteudo;
 
     /**
      * Método para pegar o valor de Nome
@@ -72,19 +72,6 @@ public class LabirintoDBO implements Cloneable, Serializable {
     }
 
     /**
-     * Construtor com informações a serem inseridas no banco
-     *
-     * @param nome nome do labirinto
-     * @param identificador identificador do labirinto
-     * @param conteudo conteúdo do labirinto
-     */
-    public LabirintoDBO(String nome, String identificador, String conteudo) {
-        this.nome = nome;
-        this.identificador = identificador;
-        this.conteudo = conteudo;
-    }
-
-    /**
      * Construtor de cópia
      * @param modelo objeto a ser copiado
      */
@@ -111,7 +98,9 @@ public class LabirintoDBO implements Cloneable, Serializable {
             ret = new LabirintoDBO(this);
         }
         catch (Exception erro)
-        {}
+        {
+            System.err.println("Erro ao clonar [" + erro + "]");
+        }
 
         return ret;
     }

@@ -1,20 +1,20 @@
 package network.entidade;
 
-import bd.dbos.LabirintoDBO;
+import network.servidor.LabirintoNetworkEntity;
 
 /**
  * Classe para comunicar pedido de salvamento de um labirinto para o servidor
  */
 public class PedidoSalvamento extends Comunicado {
 
-    private LabirintoDBO labirinto;
+    private final LabirintoNetworkEntity labirinto;
 
     /**
      * Construtor de pedido de salvamento de labirintos
      *
      * @param labirinto labirinto a ser salvado
      */
-    public PedidoSalvamento(LabirintoDBO labirinto) {
+    public PedidoSalvamento(LabirintoNetworkEntity labirinto) {
         this.labirinto = labirinto;
     }
 
@@ -22,7 +22,7 @@ public class PedidoSalvamento extends Comunicado {
      * Método para pegar o valor o identificador do cliente
      * @return String identificador do cliente
      */
-    public LabirintoDBO getLabirinto() {
+    public LabirintoNetworkEntity getLabirinto() {
         return labirinto;
     }
 }

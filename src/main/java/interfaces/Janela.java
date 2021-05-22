@@ -1,9 +1,9 @@
 package interfaces;
 
-import bd.dbos.LabirintoDBO;
 import entidade.LabirintoEntity;
 import ferramenta.LabirintoUtils;
 import network.entidade.*;
+import network.servidor.LabirintoNetworkEntity;
 import network.servidor.UsuarioConexao;
 
 import javax.swing.*;
@@ -191,7 +191,7 @@ public class Janela {
                     UsuarioConexao conexao = getConexaoNuvem();
 
                     String textoSalvar = linhas + "\n" + text;
-                    conexao.receba(new PedidoSalvamento(new LabirintoDBO(nomeLab, identificador, textoSalvar)));
+                    conexao.receba(new PedidoSalvamento(new LabirintoNetworkEntity(nomeLab, identificador, null, null, textoSalvar)));
                     JOptionPane.showMessageDialog(null, "Labirinto salvo com sucesso!");
                 }
 

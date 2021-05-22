@@ -1,32 +1,37 @@
 package network.servidor;
 
-import bd.dbos.LabirintoDBO;
 import network.entidade.Comunicado;
 
-
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 
 /**
  * Entidade de labirinto para a conexão entre cliente e servidor
  */
 public class LabirintoNetworkEntity extends Comunicado {
 
-    private ArrayList<LabirintoDBO> labirintos;
+    private final String nome;
+    private final String identificador;
+    private final LocalDateTime dataCriacao;
+    private final LocalDateTime dataEdicao;
+    private final String conteudo;
 
-    public LabirintoNetworkEntity() {
-        this.labirintos = new ArrayList<>();
+    public LabirintoNetworkEntity(String nome, String identificador, LocalDateTime dataCriacao, LocalDateTime dataEdicao, String conteudo) {
+        this.nome = nome;
+        this.identificador = identificador;
+        this.dataCriacao = dataCriacao;
+        this.dataEdicao = dataEdicao;
+        this.conteudo = conteudo;
     }
 
-    public void addLabirinto(LabirintoDBO novo) {
-        labirintos.add(novo);
+    public String getNome() {
+        return nome;
     }
 
-    public double getQtd() {
-        return labirintos.size();
+    public String getIdentificador() {
+        return identificador;
     }
 
-    public LabirintoDBO getLabirinto(int i) {
-        return labirintos.get(i);
+    public String getConteudo() {
+        return conteudo;
     }
-
 }

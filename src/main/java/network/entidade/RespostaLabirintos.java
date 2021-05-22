@@ -1,6 +1,6 @@
 package network.entidade;
 
-import bd.dbos.LabirintoDBO;
+import network.servidor.LabirintoNetworkEntity;
 
 import java.util.List;
 
@@ -9,14 +9,14 @@ import java.util.List;
  */
 public class RespostaLabirintos extends Comunicado {
 
-    private List<LabirintoDBO> labirintos;
+    private final List<LabirintoNetworkEntity> labirintos;
 
     /**
      * Construtor de a resposta de pedido de labirintos
      *
      * @param labirintos labirintos retornados pelo servidor
      */
-    public RespostaLabirintos(List<LabirintoDBO> labirintos) {
+    public RespostaLabirintos(List<LabirintoNetworkEntity> labirintos) {
         this.labirintos = labirintos;
     }
 
@@ -24,7 +24,7 @@ public class RespostaLabirintos extends Comunicado {
      * Método para pegar os labirintos retornados
      * @return List<LabirintoDBO> lista de labirintos retornados
      */
-    public List<LabirintoDBO> getLabirintos() {
+    public List<LabirintoNetworkEntity> getLabirintos() {
         return labirintos;
     }
 }

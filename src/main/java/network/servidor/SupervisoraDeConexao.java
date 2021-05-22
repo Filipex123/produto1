@@ -1,6 +1,7 @@
 package network.servidor;
 
 import bd.daos.LabirintoDAO;
+import ferramenta.LabirintoAdapter;
 import network.entidade.Comunicado;
 import network.entidade.PedidoLabirintos;
 import network.entidade.PedidoSalvamento;
@@ -10,6 +11,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class SupervisoraDeConexao extends Thread {
 
@@ -68,11 +71,17 @@ public class SupervisoraDeConexao extends Thread {
                 if(comunicado == null)
                     return;
                 else if (comunicado instanceof PedidoSalvamento) {
-                    LabirintoDAO.insert(((PedidoSalvamento) comunicado).getLabirinto());
+                    PedidoSalvamento pedidoSalvamento = ((PedidoSalvamento) comunicado);
+                    LabirintoDAO.insert(LabirintoAdapter.toDBO(pedidoSalvamento.getLabirinto()));
 		        }
                 else if (comunicado instanceof PedidoLabirintos) {
-                    PedidoLabirintos entradinha = (PedidoLabirintos)comunicado;
-					this.usuario.receba(new RespostaLabirintos(LabirintoDAO.getLabirintosByIdentificador(entradinha.getIdCliente())));
+                    PedidoLabirintos pedidoLabirintos = (PedidoLabirintos)comunicado;
+                    List<LabirintoNetworkEntity> labirintosRetornados = LabirintoDAO.getLabirintosByIdentificador(pedidoLabirintos.getIdCliente())
+                            .stream()
+                            .map(LabirintoAdapter::toNetworkEntity)
+                            .collect(Collectors.toList());
+
+					this.usuario.receba(new RespostaLabirintos(labirintosRetornados));
                 }
             }
         } catch (Exception erro) {
