@@ -1,6 +1,8 @@
-package network.servidor;
+package network.conexao;
 
-import network.entidade.Comunicado;
+
+
+import network.entidade.base.Comunicado;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

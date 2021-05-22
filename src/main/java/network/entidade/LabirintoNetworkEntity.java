@@ -1,13 +1,13 @@
-package network.servidor;
+package network.entidade;
 
-import network.entidade.Comunicado;
+import network.entidade.base.Comunicado;
 
 import java.time.LocalDateTime;
 
 /**
  * Entidade de labirinto para a conexão entre cliente e servidor
  */
-public class LabirintoNetworkEntity extends Comunicado {
+public class LabirintoNetworkEntity implements Comunicado {
 
     private final String nome;
     private final String identificador;

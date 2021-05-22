@@ -3,8 +3,9 @@ package interfaces;
 import entidade.LabirintoEntity;
 import ferramenta.LabirintoUtils;
 import network.entidade.*;
-import network.servidor.LabirintoNetworkEntity;
-import network.servidor.UsuarioConexao;
+import network.entidade.base.Comunicado;
+import network.entidade.LabirintoNetworkEntity;
+import network.conexao.UsuarioConexao;
 
 import javax.swing.*;
 import javax.swing.border.Border;

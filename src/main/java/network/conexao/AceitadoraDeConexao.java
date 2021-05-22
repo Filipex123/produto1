@@ -1,4 +1,4 @@
-package network.servidor;
+package network.conexao;
 
 import java.net.ServerSocket;
 import java.net.Socket;

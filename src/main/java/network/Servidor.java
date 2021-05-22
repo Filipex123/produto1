@@ -1,8 +1,8 @@
 package network;
 
 import network.entidade.ComunicadoDeDesligamento;
-import network.servidor.AceitadoraDeConexao;
-import network.servidor.UsuarioConexao;
+import network.conexao.AceitadoraDeConexao;
+import network.conexao.UsuarioConexao;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

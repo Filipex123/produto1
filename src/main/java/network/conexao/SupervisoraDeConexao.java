@@ -1,11 +1,12 @@
-package network.servidor;
+package network.conexao;
 
 import bd.daos.LabirintoDAO;
 import ferramenta.LabirintoAdapter;
-import network.entidade.Comunicado;
+import network.entidade.base.Comunicado;
 import network.entidade.PedidoLabirintos;
 import network.entidade.PedidoSalvamento;
 import network.entidade.RespostaLabirintos;
+import network.entidade.LabirintoNetworkEntity;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

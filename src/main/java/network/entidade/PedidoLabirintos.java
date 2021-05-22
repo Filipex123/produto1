@@ -1,9 +1,11 @@
 package network.entidade;
 
+import network.entidade.base.Comunicado;
+
 /**
  * Classe para comunicar pedido de labirinto para o servidor
  */
-public class PedidoLabirintos extends Comunicado {
+public class PedidoLabirintos implements Comunicado {
 
     private String idCliente;
 

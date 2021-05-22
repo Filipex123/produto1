@@ -1,11 +1,11 @@
 package network.entidade;
 
-import network.servidor.LabirintoNetworkEntity;
+import network.entidade.base.Comunicado;
 
 /**
  * Classe para comunicar pedido de salvamento de um labirinto para o servidor
  */
-public class PedidoSalvamento extends Comunicado {
+public class PedidoSalvamento implements Comunicado {
 
     private final LabirintoNetworkEntity labirinto;
 

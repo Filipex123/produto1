@@ -1,13 +1,13 @@
 package network.entidade;
 
-import network.servidor.LabirintoNetworkEntity;
+import network.entidade.base.Comunicado;
 
 import java.util.List;
 
 /**
  * Classe para responder ao pedido de labirintos para o servidor
  */
-public class RespostaLabirintos extends Comunicado {
+public class RespostaLabirintos implements Comunicado {
 
     private final List<LabirintoNetworkEntity> labirintos;
 

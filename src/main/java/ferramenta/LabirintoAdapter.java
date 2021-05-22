@@ -1,7 +1,7 @@
 package ferramenta;
 
 import bd.dbos.LabirintoDBO;
-import network.servidor.LabirintoNetworkEntity;
+import network.entidade.LabirintoNetworkEntity;
 
 /**
  * Adapter para entidade de banco e rede
