@@ -34,4 +34,12 @@ public class LabirintoNetworkEntity implements Comunicado {
     public String getConteudo() {
         return conteudo;
     }
+
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public LocalDateTime getDataEdicao() {
+        return dataEdicao;
+    }
 }

@@ -15,12 +15,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Classe supervisora de conexao
+ */
 public class SupervisoraDeConexao extends Thread {
 
     private UsuarioConexao usuario;
     private Socket conexao;
     private ArrayList<UsuarioConexao> usuarios;
 
+    /**
+     * Construtor
+     * @param conexao socker conexão
+     * @param usuarios lista de usuários conectados
+     * @throws Exception
+     */
     public SupervisoraDeConexao(Socket conexao, ArrayList<UsuarioConexao> usuarios) throws Exception {
 
         if (conexao==null)
@@ -33,6 +42,9 @@ public class SupervisoraDeConexao extends Thread {
         this.usuarios = usuarios;
     }
 
+    /**
+     * Método que roda a thread
+     */
     public void run() {
 
         ObjectOutputStream transmissor;

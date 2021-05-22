@@ -7,7 +7,7 @@ import network.entidade.base.Comunicado;
  */
 public class PedidoLabirintos implements Comunicado {
 
-    private String idCliente;
+    private final String idCliente;
 
     /**
      * Construtor de pedido de labirintos
