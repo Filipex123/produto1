@@ -6,6 +6,9 @@ import network.entidade.Comunicado;
 
 import java.util.ArrayList;
 
+/**
+ * Entidade de labirinto para a conexão entre cliente e servidor
+ */
 public class LabirintoNetworkEntity extends Comunicado {
 
     private ArrayList<LabirintoDBO> labirintos;

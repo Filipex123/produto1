@@ -8,6 +8,9 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.concurrent.Semaphore;
 
+/**
+ * Entidade para cada conexão com o servidor
+ */
 public class UsuarioConexao {
 
     private Socket conexao;
@@ -18,6 +21,14 @@ public class UsuarioConexao {
 
     private final Semaphore mutEx = new Semaphore (1,true);
 
+    /**
+     * Construtor da entidade de conexão
+     *
+     * @param conexao socket da conexão
+     * @param receptor objeto receptor
+     * @param transmissor objeto transmissor
+     * @throws Exception exceção de conexão
+     */
     public UsuarioConexao(Socket conexao, ObjectInputStream receptor, ObjectOutputStream transmissor) throws Exception {
         if (conexao==null)
             throw new Exception ("Conexao ausente");
@@ -33,6 +44,12 @@ public class UsuarioConexao {
         this.transmissor = transmissor;
     }
 
+    /**
+     * Método que transmite para o servidor, fazendo-o 'receber' a informação
+     *
+     * @param x comunicado
+     * @throws Exception erro na transmissão
+     */
     public void receba(Comunicado x) throws Exception {
         try {
             this.transmissor.writeObject(x);
@@ -43,6 +60,12 @@ public class UsuarioConexao {
         }
     }
 
+    /**
+     * Método que escuta a resposta do servidor para o cliente
+     *
+     * @return um comunicado
+     * @throws Exception erro na recepção
+     */
     public Comunicado espie() throws Exception {
         try {
             this.mutEx.acquireUninterruptibly();
@@ -57,6 +80,12 @@ public class UsuarioConexao {
         }
     }
 
+    /**
+     * Método que recebe a resposta do servidor, fazendo-o 'enviar'
+     *
+     * @return um comunicado
+     * @throws Exception erro na recepção
+     */
     public Comunicado envie() throws Exception {
         try {
             if (this.proximoComunicado == null) {
@@ -71,6 +100,11 @@ public class UsuarioConexao {
         }
     }
 
+    /**
+     * Método que encerra a conexão entre cliente e servidor
+     *
+     * @throws Exception erro na desconexão
+     */
     public void adeus() throws Exception
     {
         try {
@@ -83,6 +117,11 @@ public class UsuarioConexao {
         }
     }
 
+    /**
+     * Método que pega a conexão dessa entidade
+     *
+     * @return Socket conexão
+     */
     public Socket getConexao(){
         return this.conexao;
     }

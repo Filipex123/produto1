@@ -8,10 +8,18 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+/**
+ * Classe executável do servidor
+ */
 public class Servidor {
 
     private static final int PORTA_PADRAO = 2021;
 
+    /**
+     * Método onde roda o servidor
+     *
+     * @param args passados na chamada
+     */
     public static void main(String[] args) {
 
         ArrayList<UsuarioConexao> usuarios = new ArrayList<> ();
