@@ -34,8 +34,7 @@ public class Servidor {
             return;
         }
 
-        //Bloco que ouve o desligamento
-        for(;;) {
+        while (true) {
             System.out.println ("O servidor esta ativo! Para desativa-lo,");
             System.out.println ("use o comando \"desativar\"\n");
             System.out.print   ("> ");
@@ -68,10 +67,9 @@ public class Servidor {
                 // Lista conexões ativas (não closeds)
                 usuarios.forEach(item -> {
                     if(!item.getConexao().isClosed()){
-                        System.out.print("| 1 |");
+                        System.out.print("| 0 |");
                     }
                 });
-
             }
             else{
                 System.err.println ("Comando invalido!\n");

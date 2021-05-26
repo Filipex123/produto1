@@ -18,6 +18,8 @@ import java.awt.event.WindowEvent;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Classe responsável por montar a interface gráfica
@@ -109,7 +111,7 @@ public class Janela {
                 identificador = JOptionPane.showInputDialog("Digite seu identificador/email");
                 if (identificador != null) {
                     try {
-                        if (validaIdentificacao(identificador)) {
+                        if (validaIdentificacao(identificador, true)) {
                             throw new Exception("Identificar Inválido");
                         }
 
@@ -181,11 +183,11 @@ public class Janela {
                     }
                 } else if (escolha == 1) {
                     identificador = getIndentificador();
-                    if (validaIdentificacao(identificador)) {
+                    if (validaIdentificacao(identificador, true)) {
                         throw new Exception("Identificador Inválido");
                     }
                     String nomeLab = JOptionPane.showInputDialog("Digite o nome do labirinto:");
-                    if (validaIdentificacao(nomeLab)) {
+                    if (validaIdentificacao(nomeLab, false)) {
                         throw new Exception("Nome Inválido");
                     }
 
@@ -307,14 +309,14 @@ public class Janela {
         this.botoesMenu[4].setEnabled(false);
         botoes.add(this.botoesMenu[4]);
 
-        //set de painel de area de edicao
+        // set de painel de area de edicao
         Border borderArea = BorderFactory.createLineBorder(Color.BLACK, 1);
         this.areaTexto.setBorder(borderArea);
         this.areaTexto.setFont(new Font("Courier New", Font.BOLD, 16));
         this.areaTexto.setEditable(false);
         areaEdicao.add(this.areaTexto);
 
-        //set de painel de area de log
+        // set de painel de area de log
         Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
         this.areaLog.setEditable(false);
         this.areaLog.setBackground(Color.LIGHT_GRAY);
@@ -339,10 +341,10 @@ public class Janela {
         this.janela.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 try {
-                    conexao.getConexao().close();
+                    conexao.adeus();
                     System.exit(0);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
                 }
             }
         });
@@ -384,7 +386,12 @@ public class Janela {
      * @param valor valor a ser validado
      * @return resultado da validação
      */
-    private boolean validaIdentificacao(String valor) {
+    private boolean validaIdentificacao(String valor, boolean isEmail) {
+        if (isEmail) {
+            Pattern pattern = Pattern.compile("^[a-z0-9]{3,}@[a-z0-9]{3,}\\.([a-z]{2,}\\.?)+[^\\.]+$");
+            Matcher matcher = pattern.matcher(valor);
+            return !matcher.matches();
+        }
         return valor.replaceAll("\\s", "").equals("");
     }
 
