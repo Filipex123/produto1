@@ -388,7 +388,7 @@ public class Janela {
      */
     private boolean validaIdentificacao(String valor, boolean isEmail) {
         if (isEmail) {
-            Pattern pattern = Pattern.compile("^[a-z0-9]{3,}@[a-z0-9]{3,}\\.([a-z]{2,}\\.?)+[^\\.]+$");
+            Pattern pattern = Pattern.compile("^([a-z0-9-._]{3,})@([a-z0-9-]{2,26})(\\.[a-z]{2,})(\\.[a-z]{2})?$");
             Matcher matcher = pattern.matcher(valor);
             return !matcher.matches();
         }

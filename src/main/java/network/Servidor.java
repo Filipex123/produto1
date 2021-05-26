@@ -64,12 +64,13 @@ public class Servidor {
                 System.exit(0);
             }
             else if(comando.toLowerCase().equals("ls")){
-                // Lista conexões ativas (não closeds)
-                usuarios.forEach(item -> {
-                    if(!item.getConexao().isClosed()){
-                        System.out.print("| 0 |");
+                int cont = 0;
+                for(int i = 0; i < usuarios.size(); i++){
+                    if(!usuarios.get(i).getConexao().isClosed()){
+                        cont++;
                     }
-                });
+                }
+                System.out.println("Conexões ativas: " + cont);
             }
             else{
                 System.err.println ("Comando invalido!\n");
