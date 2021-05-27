@@ -53,9 +53,9 @@ public class LabirintoNetworkEntity implements Comunicado {
     }
 
     /**
-     * Método para clone de Labirinto
+     * Método para clone de LabirintoNetwork
      *
-     * @return Object do labirinto clonado
+     * @return Object do LabirintoNetwork clonado
      */
     @Override
     public Object clone ()
@@ -75,8 +75,8 @@ public class LabirintoNetworkEntity implements Comunicado {
     }
 
     /**
-     * Método para impressão customizada do Labirinto
-     * @return String impressão do objeto Labirinto
+     * Método para impressão customizada do LabirintoNetwork
+     * @return String impressão do objeto LabirintoNetwork
      */
     @Override
     public String toString(){
@@ -89,7 +89,7 @@ public class LabirintoNetworkEntity implements Comunicado {
     }
 
     /**
-     * Método hashCoode de Labirinto
+     * Método hashCoode de LabirintoNetwork
      * @return int hash code
      */
     @Override
@@ -107,7 +107,7 @@ public class LabirintoNetworkEntity implements Comunicado {
     }
 
     /**
-     * Método equals para o Labirinto
+     * Método equals para o LabirintoNetwork
      * @param obj outro objeto a ser comparado
      * @return boolean do resultado
      */
