@@ -1,6 +1,7 @@
 package network.conexao;
 
 import bd.daos.LabirintoDAO;
+import bd.dbos.LabirintoDBO;
 import ferramenta.LabirintoAdapter;
 import network.entidade.base.Comunicado;
 import network.entidade.PedidoLabirintos;
@@ -85,7 +86,15 @@ public class SupervisoraDeConexao extends Thread {
                     return;
                 else if (comunicado instanceof PedidoSalvamento) {
                     PedidoSalvamento pedidoSalvamento = ((PedidoSalvamento) comunicado);
-                    LabirintoDAO.insert(LabirintoAdapter.toDBO(pedidoSalvamento.getLabirinto()));
+
+                    LabirintoDBO labPesquisar = LabirintoAdapter.toDBO(pedidoSalvamento.getLabirinto());
+
+                    if(LabirintoDAO.getLabirintoByNomeAndIdentificador(labPesquisar.getNome(),labPesquisar.getIdentificador()).isPresent()){
+                        LabirintoDAO.update(labPesquisar);
+                    }
+                    else{
+                        LabirintoDAO.insert(labPesquisar);
+                    }
 		        }
                 else if (comunicado instanceof PedidoLabirintos) {
                     PedidoLabirintos pedidoLabirintos = (PedidoLabirintos)comunicado;

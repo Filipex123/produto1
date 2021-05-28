@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class MariaDBUtils {
 
     static final String JDBC_DRIVER = "org.mariadb.jdbc.Driver";
-    static final String DB_URL = "jdbc:mariadb://localhost:3306/projetoC";
+    static final String DB_URL = "jdbc:mariadb://localhost:3306/projetoc";
 
     static final String USER = "root";
     static final String PASS = "admin";
