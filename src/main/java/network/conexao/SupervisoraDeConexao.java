@@ -70,7 +70,7 @@ public class SupervisoraDeConexao extends Thread {
         }
 
         try {
-            this.usuario = new UsuarioConexao(this.conexao, receptor, transmissor);
+             this.usuario = new UsuarioConexao(this.conexao, receptor, transmissor);
         }
         catch(Exception erro) {} // sei que passei os parametros corretos
 

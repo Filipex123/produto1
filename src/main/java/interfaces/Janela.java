@@ -86,7 +86,7 @@ public class Janela {
         private void trateClickEmAbrir() {
             String[] opcoes = conexao != null ? new String[]{"Local", "Em Nuvem"} : new String[]{"Local"};
             int escolha = JOptionPane.showOptionDialog(
-                    null,
+                    janela,
                     "Onde deseja abrir o labirinto?",
                     "Onde Abrir?",
                     JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoes, opcoes[0]);
@@ -134,7 +134,7 @@ public class Janela {
 
                         JComboBox<String> labOptions = new JComboBox<>(labs.toArray(new String[0]));
 
-                        JOptionPane.showConfirmDialog(null, labOptions, "Escolha ai", JOptionPane.DEFAULT_OPTION);
+                        JOptionPane.showConfirmDialog(janela, labOptions, "Escolha ai", JOptionPane.DEFAULT_OPTION);
 
                         String labTexto = res.getLabirintos().get(labOptions.getSelectedIndex()).getConteudo()
                                 .replaceAll("[0-9]", "")
@@ -163,7 +163,7 @@ public class Janela {
                 Integer linhas = areaTexto.getText().split("\n").length;
                 String[] opcoes = conexao != null ? new String[]{"Local", "Em Nuvem"} : new String[]{"Local"};
                 int escolha = JOptionPane.showOptionDialog(
-                        null,
+                        janela,
                         "Onde deseja salvar o labirinto?",
                         "Onde Salvar?",
                         JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoes, opcoes[0]);
@@ -179,7 +179,7 @@ public class Janela {
                         buffer.newLine();
                         buffer.write(text);
                         buffer.flush();
-                        JOptionPane.showMessageDialog(null, "Labirinto salvo com sucesso!");
+                        JOptionPane.showMessageDialog(janela, "Labirinto salvo com sucesso!");
                     }
                 } else if (escolha == 1) {
                     identificador = getIndentificador();
@@ -195,7 +195,7 @@ public class Janela {
 
                     String textoSalvar = linhas + "\n" + text;
                     conexao.receba(new PedidoSalvamento(new LabirintoNetworkEntity(nomeLab, identificador, null, null, textoSalvar)));
-                    JOptionPane.showMessageDialog(null, "Labirinto salvo com sucesso!");
+                    JOptionPane.showMessageDialog(janela, "Labirinto salvo com sucesso!");
                 }
 
             } catch (Exception ex) {
@@ -275,7 +275,7 @@ public class Janela {
         this.conexao = this.getConexaoNuvem();
         if (conexao == null) {
             JOptionPane.showMessageDialog(
-                    null,
+                    janela,
                     "O servidor está offline.\nAs funções ABRIR e SALVAR só funcionarão localmente.",
                     "Servidor Offline",
                     JOptionPane.WARNING_MESSAGE);

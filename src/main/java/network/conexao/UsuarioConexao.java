@@ -21,7 +21,7 @@ public class UsuarioConexao {
     
     private Comunicado proximoComunicado = null;
 
-    private final Semaphore mutEx = new Semaphore (1,true);
+    private final Semaphore mutEx = new Semaphore (10,true);
 
     /**
      * Construtor da entidade de conexão
