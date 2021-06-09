@@ -1,14 +1,17 @@
+package network;
+
 import interfaces.Janela;
 
+
 /**
- * Classe main onde carrega e resolve o labirinto
+ * Classe responsável por carregar a interface gráfica do cliente
  *
  * @author Filipe Zanelato
  * @author Filipe Neves
  * @author Leonardo Guedes
  * @author Pedro Denilson
  */
-public class Main {
+public class Cliente {
     public static void main(String[] args) {
         try {
             new Janela();

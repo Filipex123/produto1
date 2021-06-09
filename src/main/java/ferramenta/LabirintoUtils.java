@@ -1,7 +1,7 @@
 package ferramenta;
 
 import entidade.Coordenada;
-import entidade.Labirinto;
+import entidade.LabirintoEntity;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.BufferedReader;
@@ -42,9 +42,16 @@ public class LabirintoUtils {
         return data.toString();
     }
 
-    public static Labirinto carregaString(String data) throws Exception {
+    /**
+     * Método para carregar uma string em objeto Labirinto
+     *
+     * @param data String do conteudo do labirinto
+     * @return LabirintoEntity objeto de labirinto
+     * @throws Exception validação de labirinto válido
+     */
+    public static LabirintoEntity carregaString(String data) throws Exception {
 
-        verifica(data, false);
+        verifica(data);
         String[] linhas = data.split("\n");
 
         Coordenada cEntrada = new Coordenada();
@@ -62,16 +69,21 @@ public class LabirintoUtils {
             }
         }
 
-        return new Labirinto(linhas.length, linhas[0].length(), cEntrada, cSaida, data);
+        return new LabirintoEntity(linhas.length, linhas[0].length(), cEntrada, cSaida, data);
     }
 
-    public static void verifica(String data, boolean salvando) throws Exception {
+    /**
+     * Método que realiza todas as validações sobre o labirinto
+     * @param data conteudo do labirinto
+     * @throws Exception validação de entrada
+     */
+    public static void verifica(String data) throws Exception {
 
         if(StringUtils.isEmpty(data)) {
             throw new Exception("Área vazia !!!");
         }
 
-        Pattern pattern = Pattern.compile(salvando?("^[ES#\\s*]+$"):("^[ES#\\s]+$"));
+        Pattern pattern = Pattern.compile("^[ES#\\s]+$");
         Matcher matcher = pattern.matcher(data);
         StringBuilder mensagens = new StringBuilder();
 

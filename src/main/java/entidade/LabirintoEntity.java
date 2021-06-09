@@ -5,7 +5,7 @@ import java.util.Arrays;
 /**
  * Entidade de labirinto com as informações dimensionais
  */
-public class Labirinto {
+public class LabirintoEntity {
 
     private Coordenada entrada;
     private Coordenada saida;
@@ -23,7 +23,7 @@ public class Labirinto {
      * @param saida   saida
      * @param data    paredes do labirinto
      */
-    public Labirinto(int altura, int largura, Coordenada entrada, Coordenada saida, String data) {
+    public LabirintoEntity(int altura, int largura, Coordenada entrada, Coordenada saida, String data) {
         this.altura = altura;
         this.largura = largura;
         this.entrada = entrada;
@@ -184,18 +184,18 @@ public class Labirinto {
             return false;
         }
 
-        if (obj.getClass()!=Labirinto.class) {
+        if (obj.getClass()!= LabirintoEntity.class) {
             return false;
         }
 
-        Labirinto labirinto = (Labirinto) obj;
+        LabirintoEntity labirintoEntity = (LabirintoEntity) obj;
 
-        return altura == labirinto.altura &&
-                largura == labirinto.largura &&
-                entrada.equals(labirinto.entrada) &&
-                saida.equals(labirinto.saida) &&
-                Arrays.deepEquals(mapa, labirinto.mapa) &&
-                atual.equals(labirinto.atual);
+        return altura == labirintoEntity.altura &&
+                largura == labirintoEntity.largura &&
+                entrada.equals(labirintoEntity.entrada) &&
+                saida.equals(labirintoEntity.saida) &&
+                Arrays.deepEquals(mapa, labirintoEntity.mapa) &&
+                atual.equals(labirintoEntity.atual);
     }
 
     @Override

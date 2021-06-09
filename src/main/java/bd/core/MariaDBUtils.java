@@ -1,0 +1,22 @@
+package bd.core;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+/**
+ * Classe utils para conexão com MariaDB
+ */
+public class MariaDBUtils {
+
+    static final String JDBC_DRIVER = "org.mariadb.jdbc.Driver";
+    static final String DB_URL = "jdbc:mariadb://localhost:3306/projetoc";
+
+    static final String USER = "root";
+    static final String PASS = "admin";
+
+    public static Connection getConexao() throws ClassNotFoundException, SQLException {
+        Class.forName(JDBC_DRIVER);
+        return DriverManager.getConnection(DB_URL, USER, PASS);
+    }
+}
