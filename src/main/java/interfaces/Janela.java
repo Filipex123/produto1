@@ -6,6 +6,7 @@ import network.entidade.*;
 import network.entidade.base.Comunicado;
 import network.entidade.LabirintoNetworkEntity;
 import network.conexao.UsuarioConexao;
+import network.exception.FormatoEmailException;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -108,11 +109,11 @@ public class Janela {
                     }
                 }
             } else if (escolha == 1) {
-                identificador = JOptionPane.showInputDialog("Digite seu identificador/email");
+                identificador = JOptionPane.showInputDialog(janela, "Digite seu identificador/email");
                 if (identificador != null) {
                     try {
                         if (validaIdentificacao(identificador, true)) {
-                            throw new Exception("Identificar Inválido");
+                            throw new FormatoEmailException("Identificar Inválido");
                         }
 
                         UsuarioConexao conexao = getConexaoNuvem();
@@ -142,15 +143,21 @@ public class Janela {
 
                         areaTexto.setText(labTexto);
 
+                    } catch (FormatoEmailException ex) {
+                        JOptionPane.showMessageDialog(
+                                janela,
+                                ex.getMessage(),
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                        areaLog.setText("");
+
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(
                                 janela,
-                                "Identificar Inválido.",
-                                "Erro",
-                                JOptionPane.ERROR_MESSAGE);
-                        areaLog.setForeground(Color.RED);
+                                "Nenhum labirinto encontrado no servidor.",
+                                "Warning",
+                                JOptionPane.WARNING_MESSAGE);
                         areaLog.setText("");
-                        areaLog.append(ex.getMessage());
                     }
                 }
             }
@@ -184,11 +191,11 @@ public class Janela {
                 } else if (escolha == 1) {
                     identificador = getIndentificador();
                     if (validaIdentificacao(identificador, true)) {
-                        throw new Exception("Identificador Inválido");
+                        throw new FormatoEmailException("Identificador Inválido");
                     }
-                    String nomeLab = JOptionPane.showInputDialog("Digite o nome do labirinto:");
+                    String nomeLab = JOptionPane.showInputDialog(janela, "Digite o nome do labirinto:");
                     if (validaIdentificacao(nomeLab, false)) {
-                        throw new Exception("Nome Inválido");
+                        throw new FormatoEmailException("Nome Inválido");
                     }
 
                     UsuarioConexao conexao = getConexaoNuvem();
@@ -404,6 +411,6 @@ public class Janela {
         if (this.identificador != null)
             return this.identificador;
 
-        return JOptionPane.showInputDialog("Digite seu identificador/email");
+        return JOptionPane.showInputDialog(janela, "Digite seu identificador/email");
     }
 }
