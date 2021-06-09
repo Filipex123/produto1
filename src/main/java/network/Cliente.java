@@ -2,8 +2,9 @@ package network;
 
 import interfaces.Janela;
 
+
 /**
- * Classe main onde carrega e resolve o labirinto
+ * Classe responsável por carregar a interface gráfica do cliente
  *
  * @author Filipe Zanelato
  * @author Filipe Neves
